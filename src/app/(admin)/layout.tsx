@@ -1,3 +1,4 @@
+import Navbar from '@/components/module/sidebar/Navbar'
 import Sidebar from '@/components/module/sidebar/Sidebar'
 import React from 'react'
 
@@ -7,9 +8,12 @@ export interface AdminLayoutProps {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
-    <div className="flex">
+    <div className="relative flex">
       <Sidebar />
-      <main className="flex w-full items-center justify-center">{children}</main>
+      <div className="w-full">
+        <Navbar />
+        <main className="flex w-full">{children}</main>
+      </div>
     </div>
   )
 }

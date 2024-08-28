@@ -36,7 +36,8 @@ export default function FormLogin() {
     toast({
       title: 'Scheduled: Catch up',
       description: 'Friday, February 10, 2023 at 5:57 PM',
-      variant: 'success'
+      variant: 'success',
+      duration: 2000
     })
     router.push('/home')
     console.log(values)
