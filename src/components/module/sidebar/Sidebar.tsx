@@ -35,7 +35,7 @@ export default function Sidebar() {
         {menu.map(({ label, link, icon }) => (
           <TooltipProvider key={label} delayDuration={300}>
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <Button variant="ghost" size={isOpen ? 'sm' : 'icon'} onClick={() => route.push(link)}>
                   <FontAwesomeIcon icon={icon} className="size-5" />
                   {isOpen && <p className="ml-2">{label}</p>}
