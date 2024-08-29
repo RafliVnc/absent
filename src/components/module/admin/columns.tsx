@@ -16,14 +16,14 @@ import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-  id: string
-  amount: number
-  status: 'pending' | 'processing' | 'success' | 'failed'
-  email: string
+export type Todos = {
+  id: number
+  title: string
+  body: string
+  userId: number
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Todos>[] = [
   {
     accessorKey: 'id',
     header: () => <div className="text-center">No</div>,
@@ -32,31 +32,22 @@ export const columns: ColumnDef<Payment>[] = [
     }
   },
   {
-    accessorKey: 'status',
-    header: 'Status'
+    accessorKey: 'userId',
+    header: 'UserId'
   },
   {
-    accessorKey: 'email',
-    header: 'Email'
+    accessorKey: 'body',
+    header: 'Body'
   },
   {
-    accessorKey: 'amount',
-    header: () => <div className="text-start">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('amount'))
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(amount)
-
-      return <div className="text-start font-medium">{formatted}</div>
-    }
+    accessorKey: 'title',
+    header: () => <div className="text-start">Title</div>
   },
   {
     id: 'actions',
     header: () => <div className="text-center">Action</div>,
     cell: ({ row }) => {
-      const payment = row.original
+      const Todos = row.original
 
       return (
         <div className="flex justify-center">
@@ -69,12 +60,12 @@ export const columns: ColumnDef<Payment>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
-                Copy payment ID
+              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(String(Todos.id))}>
+                Copy Todos ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
+              <DropdownMenuItem>View Todos details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

@@ -59,7 +59,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       </div>
       <div className="flex items-center justify-between p-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getRowModel().rows?.length + table.getState().pagination.pageIndex * 10} of {data.length} rows
+          {table.getRowModel().rows?.length +
+            table.getState().pagination.pageIndex * table.getState().pagination.pageSize}{' '}
+          of {data.length} rows
         </div>
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
