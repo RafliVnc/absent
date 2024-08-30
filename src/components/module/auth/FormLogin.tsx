@@ -13,12 +13,20 @@ import { Separator } from '@/components/ui/separator'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { useToast } from '@/components/ui/use-toast'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { loginSchema } from '@/schema/authSchema'
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
 
 export default function FormLogin() {
   const { toast } = useToast()
   const router = useRouter()
+  const SearchParams = useSearchParams()
+  const urlError =
+    SearchParams.get('error') === 'OAuthAccountNotLinked' ? 'Account already linked use another Email' : ''
+  const [isLoading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -50,6 +58,18 @@ export default function FormLogin() {
     router.push('/home')
   }
 
+  const onClick = async (e: React.MouseEvent<HTMLButtonElement>, provider: 'github' | 'google') => {
+    e.preventDefault()
+    try {
+      setLoading(true)
+      await signIn(provider, {
+        callbackUrl: DEFAULT_LOGIN_REDIRECT
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
@@ -68,6 +88,13 @@ export default function FormLogin() {
         />
         <PasswordInput control={form.control} name="password" title="Password" />
         <div>
+          {urlError && (
+            <Alert variant="destructive">
+              <FontAwesomeIcon icon={faCircleInfo} className="size-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{urlError}</AlertDescription>
+            </Alert>
+          )}
           <Button className="mt-4 w-full" type="submit" disabled={form.formState.isSubmitting}>
             Submit
           </Button>
@@ -81,10 +108,22 @@ export default function FormLogin() {
           </div>
         </div>
         <div className="grid w-full grid-cols-2 gap-4">
-          <Button className="w-full" type="button" variant="outline">
+          <Button
+            className="w-full"
+            type="button"
+            variant="outline"
+            onClick={e => onClick(e, 'github')}
+            disabled={isLoading}
+          >
             <FontAwesomeIcon icon={faGithub} className="mr-4 size-5" /> Github
           </Button>
-          <Button className="w-full" type="button" variant="outline">
+          <Button
+            className="w-full"
+            type="button"
+            variant="outline"
+            onClick={e => onClick(e, 'google')}
+            disabled={isLoading}
+          >
             <FontAwesomeIcon icon={faGoogle} className="mr-4 size-5" /> Google
           </Button>
         </div>

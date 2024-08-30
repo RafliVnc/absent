@@ -1,9 +1,12 @@
 import prisma from '@/lib/db/prisma'
 import { User } from '@prisma/client'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
 
 import bcrypt from 'bcrypt'
 import NextAuth, { AuthOptions } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
+import GoogleProvider from 'next-auth/providers/google'
+import GitHubProvider from 'next-auth/providers/github'
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -29,6 +32,14 @@ export const authOptions: AuthOptions = {
 
         return user
       }
+    }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID as string,
+      clientSecret: process.env.GITHUB_SECRET as string
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
     })
   ],
   callbacks: {
@@ -42,7 +53,9 @@ export const authOptions: AuthOptions = {
       return session
     }
   },
-  secret: process.env.NEXTAUTH_SECRET as string
+  secret: process.env.NEXTAUTH_SECRET as string,
+  session: { strategy: 'jwt' },
+  adapter: PrismaAdapter(prisma)
 }
 
 const handler = NextAuth(authOptions)

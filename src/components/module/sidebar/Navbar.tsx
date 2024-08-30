@@ -60,7 +60,7 @@ export default function Navbar() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                signOut({ redirect: false })
+                signOut({ redirect: true, callbackUrl: '/login' })
                 toast({
                   title: 'Logged out !!',
                   variant: 'success',
