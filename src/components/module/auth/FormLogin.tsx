@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { signIn } from 'next-auth/react'
 
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -12,35 +13,61 @@ import { Separator } from '@/components/ui/separator'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { useToast } from '@/components/ui/use-toast'
-import { useRouter } from 'next/navigation'
-
-// Skema validasi dengan Zod
-const loginSchema = z.object({
-  username: z.string().min(1, { message: 'Username is required.' }),
-  password: z.string().min(8, { message: 'Password must be at least 8 characters.' })
-})
+import { useRouter, useSearchParams } from 'next/navigation'
+import { loginSchema } from '@/schema/authSchema'
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
 
 export default function FormLogin() {
   const { toast } = useToast()
   const router = useRouter()
+  const SearchParams = useSearchParams()
+  const urlError =
+    SearchParams.get('error') === 'OAuthAccountNotLinked' ? 'Account already linked use another Email' : ''
+  const [isLoading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: ''
     }
   })
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    const result = await signIn('credentials', {
+      redirect: false,
+      username: values.email,
+      password: values.password
+    })
+    if (!result?.ok) {
+      toast({
+        title: `${result?.error}`,
+        variant: 'destructive',
+        duration: 2000
+      })
+      return
+    }
     toast({
-      title: 'Scheduled: Catch up',
-      description: 'Friday, February 10, 2023 at 5:57 PM',
+      title: 'Welcome back!',
       variant: 'success',
       duration: 2000
     })
     router.push('/home')
-    console.log(values)
+  }
+
+  const onClick = async (e: React.MouseEvent<HTMLButtonElement>, provider: 'github' | 'google') => {
+    e.preventDefault()
+    try {
+      setLoading(true)
+      await signIn(provider, {
+        callbackUrl: DEFAULT_LOGIN_REDIRECT
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -48,12 +75,12 @@ export default function FormLogin() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="ex. johndoe" {...field} />
+                <Input placeholder="example@email.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -61,7 +88,14 @@ export default function FormLogin() {
         />
         <PasswordInput control={form.control} name="password" title="Password" />
         <div>
-          <Button className="mt-4 w-full" type="submit">
+          {urlError && (
+            <Alert variant="destructive">
+              <FontAwesomeIcon icon={faCircleInfo} className="size-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{urlError}</AlertDescription>
+            </Alert>
+          )}
+          <Button className="mt-4 w-full" type="submit" disabled={form.formState.isSubmitting}>
             Submit
           </Button>
         </div>
@@ -74,10 +108,22 @@ export default function FormLogin() {
           </div>
         </div>
         <div className="grid w-full grid-cols-2 gap-4">
-          <Button className="w-full" type="button" variant="outline">
+          <Button
+            className="w-full"
+            type="button"
+            variant="outline"
+            onClick={e => onClick(e, 'github')}
+            disabled={isLoading}
+          >
             <FontAwesomeIcon icon={faGithub} className="mr-4 size-5" /> Github
           </Button>
-          <Button className="w-full" type="button" variant="outline">
+          <Button
+            className="w-full"
+            type="button"
+            variant="outline"
+            onClick={e => onClick(e, 'google')}
+            disabled={isLoading}
+          >
             <FontAwesomeIcon icon={faGoogle} className="mr-4 size-5" /> Google
           </Button>
         </div>
