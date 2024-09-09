@@ -13,41 +13,50 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
+import { UserWitoutPassword } from '@/app/api/(modal)/userModal'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Todos = {
-  id: number
-  title: string
-  body: string
-  userId: number
-}
 
-export const columns: ColumnDef<Todos>[] = [
+export const columns: ColumnDef<UserWitoutPassword>[] = [
   {
     accessorKey: 'id',
     header: () => <div className="text-center">No</div>,
-    cell: ({ row }) => {
-      return <div className="text-center">{row.index + 1}</div>
+    cell: ({ row, table }) => {
+      return (
+        <div className="text-center">
+          {table.getState().pagination.pageSize * table.getState().pagination.pageIndex + row.index + 1}
+        </div>
+      )
     }
   },
   {
-    accessorKey: 'userId',
-    header: 'UserId'
+    accessorKey: 'name',
+    header: 'Name',
+    cell: ({ row }) => {
+      const Admin = row.original
+
+      return (
+        <div className="text-start">
+          <p className="text-base">{Admin.name}</p>
+          <p className="text-xs text-muted-foreground">{Admin.role}</p>
+        </div>
+      )
+    }
   },
   {
-    accessorKey: 'body',
-    header: 'Body'
+    accessorKey: 'email',
+    header: 'Email'
   },
   {
-    accessorKey: 'title',
-    header: () => <div className="text-start">Title</div>
+    accessorKey: 'createdAt',
+    header: () => <div className="text-start">Created</div>
   },
   {
     id: 'actions',
     header: () => <div className="text-center">Action</div>,
     cell: ({ row }) => {
-      const Todos = row.original
+      const Admin = row.original
 
       return (
         <div className="flex justify-center">
@@ -60,12 +69,12 @@ export const columns: ColumnDef<Todos>[] = [
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(String(Todos.id))}>
-                Copy Todos ID
+              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(String(Admin.id))}>
+                Copy Admin ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View Todos details</DropdownMenuItem>
+              <DropdownMenuItem>View Admin details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

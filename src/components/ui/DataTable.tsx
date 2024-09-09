@@ -1,6 +1,6 @@
 'use client'
 
-import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
+import { flexRender, Table as TanStackTable } from '@tanstack/react-table'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table'
 import { Button } from './button'
@@ -8,19 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleLeft, faAngleRight, faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons'
 
+// eslint-disable-next-line no-unused-vars
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  table: TanStackTable<TData>
+  isLoading?: boolean
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
-  })
-
+export function DataTable<TData, TValue>({ table, isLoading }: DataTableProps<TData, TValue>) {
   return (
     <div>
       <div className="rounded-md border">
@@ -39,17 +33,24 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={100} className="h-24 text-center">
+                  Loading
+                </TableCell>
+              </TableRow>
+            )}
+            {!isLoading &&
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map(cell => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : (
+              ))}
+            {!isLoading && !table.getRowModel().rows.length && (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell colSpan={100} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
@@ -61,7 +62,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getRowModel().rows?.length +
             table.getState().pagination.pageIndex * table.getState().pagination.pageSize}{' '}
-          of {data.length} rows
+          of {table.getRowCount()} rows
         </div>
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
@@ -91,7 +92,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
-              onClick={() => table.setPageIndex(0)}
+              onClick={() => {
+                table.setPageIndex(0)
+              }}
               disabled={!table.getCanPreviousPage()}
             >
               <span className="sr-only">Go to first page</span>
@@ -100,7 +103,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
-              onClick={() => table.previousPage()}
+              onClick={() => {
+                table.previousPage()
+              }}
               disabled={!table.getCanPreviousPage()}
             >
               <span className="sr-only">Go to previous page</span>
@@ -109,7 +114,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
-              onClick={() => table.nextPage()}
+              onClick={() => {
+                table.nextPage()
+              }}
               disabled={!table.getCanNextPage()}
             >
               <span className="sr-only">Go to next page</span>
@@ -118,7 +125,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              onClick={() => {
+                table.setPageIndex(table.getPageCount() - 1)
+              }}
               disabled={!table.getCanNextPage()}
             >
               <span className="sr-only">Go to last page</span>

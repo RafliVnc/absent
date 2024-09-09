@@ -1,18 +1,15 @@
+'use client'
+
 import { DataTable } from '@/components/ui/DataTable'
-import { Todos, columns } from './columns'
+import { columns } from './columns'
+import { useTable } from '@/hooks/useTable'
 
-async function getData(): Promise<Todos[]> {
-  const res = await fetch('https://jsonplaceholder.typicode.com/posts').then(res => res.json())
-  // Fetch data from your API here.
-  return res
-}
-
-export default async function TableAdmin() {
-  const data = await getData()
+export default function TableAdmin() {
+  const { table, isLoading } = useTable('api/admin', { key: 'admin', columns })
 
   return (
     <div className="mx-8 py-10">
-      <DataTable columns={columns} data={data} />
+      <DataTable isLoading={isLoading} table={table} />
     </div>
   )
 }
