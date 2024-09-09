@@ -24,6 +24,7 @@ export default function Navbar() {
   const { user, status } = useCurrentUser()
   const route = useRouter()
   const { toast } = useToast()
+
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center justify-end gap-3 bg-white px-10 shadow-custom">
       {status === 'loading' ? (
