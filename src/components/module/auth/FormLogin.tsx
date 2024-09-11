@@ -16,7 +16,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { loginSchema } from '@/schema/authSchema'
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 
@@ -27,6 +27,7 @@ export default function FormLogin() {
   const urlError =
     SearchParams.get('error') === 'OAuthAccountNotLinked' ? 'Account already linked use another Email' : ''
   const [isLoading, setLoading] = useState(false)
+  const [error, setError] = useState<string | undefined>()
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -48,6 +49,7 @@ export default function FormLogin() {
         variant: 'destructive',
         duration: 2000
       })
+      setError(String(result?.error))
       return
     }
     toast({
@@ -88,11 +90,10 @@ export default function FormLogin() {
         />
         <PasswordInput control={form.control} name="password" title="Password" />
         <div>
-          {urlError && (
+          {(urlError || error) && (
             <Alert variant="destructive">
               <FontAwesomeIcon icon={faCircleInfo} className="size-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{urlError}</AlertDescription>
+              <AlertDescription>{urlError || error}</AlertDescription>
             </Alert>
           )}
           <Button className="mt-4 w-full" type="submit" disabled={form.formState.isSubmitting}>

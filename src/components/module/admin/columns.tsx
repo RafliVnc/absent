@@ -38,7 +38,7 @@ export const columns: ColumnDef<UserWitoutPassword>[] = [
 
       return (
         <div className="text-start">
-          <p className="text-base">{Admin.name}</p>
+          <p className="text-sm">{Admin.name}</p>
           <p className="text-xs text-muted-foreground">{Admin.role}</p>
         </div>
       )

@@ -7,6 +7,7 @@ import { Button } from './button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleLeft, faAngleRight, faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons'
+import { Skeleton } from './skeleton'
 
 // eslint-disable-next-line no-unused-vars
 interface DataTableProps<TData, TValue> {
@@ -33,13 +34,16 @@ export function DataTable<TData, TValue>({ table, isLoading }: DataTableProps<TD
             ))}
           </TableHeader>
           <TableBody>
-            {isLoading && (
-              <TableRow>
-                <TableCell colSpan={100} className="h-24 text-center">
-                  Loading
-                </TableCell>
-              </TableRow>
-            )}
+            {isLoading &&
+              [...Array(5)].map((_, i) => (
+                <TableRow key={i}>
+                  {[...Array(table.getAllColumns().length)].map((_, i) => (
+                    <TableCell colSpan={table.getHeaderGroups().length} className="h-14" key={i}>
+                      <Skeleton className="h-8 w-5/6" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
             {!isLoading &&
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>

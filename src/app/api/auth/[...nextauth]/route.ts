@@ -26,6 +26,8 @@ export const authOptions: AuthOptions = {
         if (!user) throw new Error('Email or password incorrect')
         if (!credentials?.password) throw new Error('Please provide your password')
 
+        if (!user.password) throw new Error('Account already linked use another Email')
+
         const isPasswordCorrect = await bcrypt.compare(credentials?.password, user.password!)
 
         if (!isPasswordCorrect) throw new Error('Email or password incorrect')
