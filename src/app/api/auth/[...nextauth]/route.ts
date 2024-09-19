@@ -41,10 +41,19 @@ export const authOptions: AuthOptions = {
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      allowDangerousEmailAccountLinking: true
     })
   ],
   callbacks: {
+    async signIn({ user }) {
+      if (!user.email) throw new Error('Please provide your email')
+      const prismaUser = await prisma.user.findUnique({
+        where: { email: user.email }
+      })
+      if (!prismaUser) throw new Error('Cant Login')
+      return true
+    },
     async jwt({ token, user }) {
       if (user) token.user = user as User
       return token

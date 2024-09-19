@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { UserRole } from '@prisma/client'
@@ -19,8 +19,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/components/ui/use-toast'
+import ProfileDialog from './ProfileDialog'
 
 export default function Navbar() {
+  const [isOpen, setOpen] = useState(false)
   const { user, status } = useCurrentUser()
   const route = useRouter()
   const { toast } = useToast()
@@ -54,7 +56,7 @@ export default function Navbar() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setOpen(true)}>
               <FontAwesomeIcon icon={faUser} className="mr-2 size-4" />
               <span>Profile</span>
             </DropdownMenuItem>
@@ -76,6 +78,7 @@ export default function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>
       )}
+      <ProfileDialog isOpen={isOpen} setOpen={setOpen} />
     </header>
   )
 }
