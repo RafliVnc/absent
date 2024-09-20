@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Tabs } from '@radix-ui/react-tabs'
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 
 export default function ProfileDialog({
   isOpen,
@@ -16,6 +17,7 @@ export default function ProfileDialog({
   isOpen: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
+  const { user } = useCurrentUser()
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent>
@@ -30,12 +32,12 @@ export default function ProfileDialog({
           <TabsContent value="account">
             <div className="space-y-4">
               <div className="space-y-1">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" defaultValue="Pedro Duarte" />
+                <Label htmlFor="username">Email</Label>
+                <Input disabled id="username" defaultValue={user.email ?? ''} />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="username">Username</Label>
-                <Input id="username" defaultValue="@peduarte" />
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" defaultValue={user.name ?? ''} />
               </div>
             </div>
           </TabsContent>

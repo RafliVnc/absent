@@ -4,14 +4,15 @@ import { Input } from './input'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { Button } from './button'
+import { Control, FieldValues, Path } from 'react-hook-form'
 
-export interface PasswordProps {
-  control: any
+export interface PasswordProps<T extends FieldValues> {
+  control: Control<T>
   title: string
-  name: string
+  name: Path<T>
 }
 
-export default function PasswordInput({ control, title, name }: PasswordProps) {
+export default function PasswordInput<T extends FieldValues>({ control, title, name }: PasswordProps<T>) {
   const [showPassword, setShowPassword] = useState(false)
 
   const handleTogglePassword = () => {

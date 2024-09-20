@@ -88,7 +88,7 @@ export default function FormLogin() {
             </FormItem>
           )}
         />
-        <PasswordInput control={form.control} name="password" title="Password" />
+        <PasswordInput<z.infer<typeof loginSchema>> control={form.control} name="password" title="Password" />
         <div>
           {(urlError || error) && (
             <Alert variant="destructive">
