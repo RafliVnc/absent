@@ -1,10 +1,13 @@
 'use client'
+
 import React from 'react'
 import { Dialog } from '@radix-ui/react-dialog'
-import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Tabs } from '@radix-ui/react-tabs'
+import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function ProfileDialog({
   isOpen,
@@ -15,25 +18,40 @@ export default function ProfileDialog({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>Make changes to your profile here. Click save when youre done.</DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input id="name" defaultValue="Pedro Duarte" className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input id="username" defaultValue="@peduarte" className="col-span-3" />
-          </div>
-        </div>
+        <Tabs defaultValue="account">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="account">Account</TabsTrigger>
+            <TabsTrigger value="password">Password</TabsTrigger>
+          </TabsList>
+          <TabsContent value="account">
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" defaultValue="Pedro Duarte" />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="username">Username</Label>
+                <Input id="username" defaultValue="@peduarte" />
+              </div>
+            </div>
+          </TabsContent>
+          <TabsContent value="password">
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <Label htmlFor="current">Current password</Label>
+                <Input id="current" type="password" />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="new">New password</Label>
+                <Input id="new" type="password" />
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
         <DialogFooter>
           <Button type="submit">Save changes</Button>
         </DialogFooter>
