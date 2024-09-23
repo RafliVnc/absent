@@ -25,7 +25,9 @@ export default function FormLogin() {
   const router = useRouter()
   const SearchParams = useSearchParams()
   const urlError =
-    SearchParams.get('error') === 'OAuthAccountNotLinked' ? 'Account already linked use another Email' : ''
+    (SearchParams.get('error') === 'OAuthAccountNotLinked' && 'Account already linked use another Email') ||
+    (SearchParams.get('error') === 'Cant Login' && 'Your email not registered')
+
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<string | undefined>()
 

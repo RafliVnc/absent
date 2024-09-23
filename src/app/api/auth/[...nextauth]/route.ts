@@ -10,7 +10,8 @@ import GitHubProvider from 'next-auth/providers/github'
 
 export const authOptions: AuthOptions = {
   pages: {
-    signIn: '/login'
+    signIn: '/login',
+    error: '/login'
   },
   providers: [
     Credentials({

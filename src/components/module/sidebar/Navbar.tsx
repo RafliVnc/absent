@@ -48,7 +48,7 @@ export default function Navbar() {
                 </p>
               </div>
               <Avatar>
-                <AvatarImage src={`${user?.image}`} />
+                <AvatarImage src={`${user?.image ?? ''}`} />
                 <AvatarFallback>{user?.name ? user.name[0].toLocaleUpperCase() : 'A'}</AvatarFallback>
               </Avatar>
             </Button>
