@@ -27,7 +27,7 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`flex min-h-screen justify-center ${isOpen ? `w-[15%]` : `w-[5%]`} transition-width transition-width bg-primary p-4 text-white duration-300`}
+      className={`flex min-h-screen justify-center ${isOpen ? `w-[15%]` : `w-[5%]`} transition-width bg-primary p-4 text-white duration-300`}
     >
       <div className="fixed flex flex-col items-center justify-center gap-4">
         <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} className="mb-2">
@@ -39,8 +39,10 @@ export default function Sidebar() {
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
-                  className={location === link ? 'mx-3 bg-primary-foreground text-primary' : ''}
-                  size={isOpen ? 'sm' : 'icon'}
+                  className={
+                    location === link ? 'mx-3 bg-primary-foreground text-primary transition-all duration-100' : ''
+                  }
+                  size={isOpen ? 'default' : 'icon'}
                   onClick={() => route.push(link)}
                 >
                   <FontAwesomeIcon icon={icon} className="size-5" />

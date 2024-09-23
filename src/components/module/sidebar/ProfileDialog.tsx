@@ -1,14 +1,20 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dialog } from '@radix-ui/react-dialog'
 import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Tabs } from '@radix-ui/react-tabs'
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import FormAccount from './FormAccount'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { profileUpdateSchema, updatePasswordSchema } from '@/schema/userSchema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { useToast } from '@/components/ui/use-toast'
+import { UserRole } from '@prisma/client'
+import FormPassword from './FormPassword'
 
 export default function ProfileDialog({
   isOpen,
@@ -17,45 +23,96 @@ export default function ProfileDialog({
   isOpen: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  const { user } = useCurrentUser()
+  const { user, update } = useCurrentUser()
+  const { toast } = useToast()
+  const [activeTab, setActiveTab] = useState('account')
+
+  const formAccount = useForm<z.infer<typeof profileUpdateSchema>>({
+    resolver: zodResolver(profileUpdateSchema),
+    defaultValues: {
+      name: ''
+    }
+  })
+
+  const formPassword = useForm<z.infer<typeof updatePasswordSchema>>({
+    resolver: zodResolver(updatePasswordSchema),
+    defaultValues: {
+      password: '',
+      newPassword: '',
+      confirmPassword: ''
+    }
+  })
+
+  useEffect(() => {
+    if (user) {
+      formAccount.reset({
+        name: user.name || ''
+      })
+    }
+  }, [user, formAccount])
+
+  const handleUpdateAccount = async (data: z.infer<typeof profileUpdateSchema>) => {
+    const response = await fetch(`/api/user/${user?.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+
+    if (response.ok) {
+      update({ name: data.name })
+      toast({ title: 'Profile updated', variant: 'success', duration: 2000 })
+      setOpen(false)
+    } else {
+      const { error } = await response.json()
+      toast({ title: error, variant: 'destructive', duration: 2000 })
+    }
+  }
+  const handleUpdatePassword = async (data: z.infer<typeof updatePasswordSchema>) => {
+    const response = await fetch(`/api/user/${user?.id}/password`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+
+    if (response.ok) {
+      toast({ title: 'Password updated', variant: 'success', duration: 2000 })
+      formPassword.reset()
+      setOpen(false)
+    } else {
+      const { error } = await response.json()
+      toast({ title: error, variant: 'destructive', duration: 2000 })
+    }
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
         </DialogHeader>
-        <Tabs defaultValue="account">
-          <TabsList className="grid w-full grid-cols-2">
+        <Tabs value={activeTab} onValueChange={value => setActiveTab(value)}>
+          <TabsList className={`grid w-full ${user.role === UserRole.ADMIN ? 'grid-cols-2' : 'grid-cols-1'}`}>
             <TabsTrigger value="account">Account</TabsTrigger>
-            <TabsTrigger value="password">Password</TabsTrigger>
+            {user.role === UserRole.ADMIN && <TabsTrigger value="password">Password</TabsTrigger>}
           </TabsList>
           <TabsContent value="account">
-            <div className="space-y-4">
-              <div className="space-y-1">
-                <Label htmlFor="username">Email</Label>
-                <Input disabled id="username" defaultValue={user.email ?? ''} />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" defaultValue={user.name ?? ''} />
-              </div>
-            </div>
+            <FormAccount form={formAccount} />
           </TabsContent>
           <TabsContent value="password">
-            <div className="space-y-4">
-              <div className="space-y-1">
-                <Label htmlFor="current">Current password</Label>
-                <Input id="current" type="password" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="new">New password</Label>
-                <Input id="new" type="password" />
-              </div>
-            </div>
+            <FormPassword form={formPassword} />
           </TabsContent>
         </Tabs>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button
+            type="submit"
+            onClick={
+              activeTab === 'account'
+                ? formAccount.handleSubmit(handleUpdateAccount)
+                : formPassword.handleSubmit(handleUpdatePassword)
+            }
+          >
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
