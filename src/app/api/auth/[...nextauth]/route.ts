@@ -54,7 +54,12 @@ export const authOptions: AuthOptions = {
       if (!prismaUser) throw new Error('Cant Login')
       return true
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === 'update') {
+        token.name = session.name
+        token.user.name = session.name
+        return { ...session.user, ...token }
+      }
       if (user) token.user = user as User
       return token
     },

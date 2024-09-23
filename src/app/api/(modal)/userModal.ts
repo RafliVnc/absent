@@ -32,3 +32,11 @@ export const getPagination = async (
 
   return { rows: user, count }
 }
+
+export const getUserById = async (id: string): Promise<User | null> => {
+  return prisma.user.findUnique({ where: { id } })
+}
+
+export const updateUser = async (id: string, data: Prisma.UserUpdateInput): Promise<User> => {
+  return prisma.user.update({ where: { id }, data })
+}
