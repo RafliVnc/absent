@@ -31,7 +31,11 @@ export const useTable = <TData extends object, TValue>(
     }
   }
 
-  const { isFetching: isLoading, data } = useQuery({
+  const {
+    isFetching: isLoading,
+    data,
+    refetch
+  } = useQuery({
     queryKey: [key, pagination],
     queryFn: () => get(pagination.pageIndex + 1, pagination.pageSize),
     placeholderData: { keepPreviousData: true }
@@ -52,5 +56,9 @@ export const useTable = <TData extends object, TValue>(
     }
   })
 
-  return { isLoading, table }
+  return {
+    isLoading,
+    table,
+    reload: () => refetch()
+  }
 }

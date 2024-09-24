@@ -40,3 +40,11 @@ export const getUserById = async (id: string): Promise<User | null> => {
 export const updateUser = async (id: string, data: Prisma.UserUpdateInput): Promise<User> => {
   return prisma.user.update({ where: { id }, data })
 }
+
+export const createUser = async (data: Prisma.UserCreateInput): Promise<User> => {
+  return prisma.user.create({ data })
+}
+
+export const countUserbyEmail = async (email: string): Promise<number> => {
+  return prisma.user.count({ where: { email } })
+}

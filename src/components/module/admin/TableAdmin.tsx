@@ -16,20 +16,20 @@ import { z } from 'zod'
 import { useToast } from '@/components/ui/use-toast'
 
 export default function TableAdmin() {
-  const { table, isLoading } = useTable('api/admin', { key: 'admin', columns })
+  const { table, isLoading, reload } = useTable('api/admin', { key: 'admin', columns })
   const [isOpen, setOpen] = useState(false)
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof createAdminSchema>>({
     resolver: zodResolver(createAdminSchema),
     defaultValues: {
-      id: '',
       name: '',
       email: '',
       password: '',
       confirmPassword: ''
     }
   })
+
   const handleSubmit = async (data: z.infer<typeof createAdminSchema>) => {
     const response = await fetch('/api/admin', {
       method: 'POST',
@@ -39,6 +39,7 @@ export default function TableAdmin() {
 
     if (response.ok) {
       toast({ title: 'Admin created', variant: 'success', duration: 2000 })
+      reload()
       setOpen(false)
       form.reset()
     } else {

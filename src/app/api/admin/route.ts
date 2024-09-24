@@ -17,3 +17,15 @@ export async function GET(req: NextRequest) {
     }
   }
 }
+
+export async function POST(req: NextRequest) {
+  try {
+    const data = await req.json()
+    const user = await adminService.createAdmin(data)
+    return NextResponse.json({ data: user }, { status: 201 })
+  } catch (e) {
+    if (e instanceof Error) {
+      return NextResponse.json({ message: e.message }, { status: 500 })
+    }
+  }
+}
