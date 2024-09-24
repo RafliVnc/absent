@@ -1,7 +1,18 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "no-unused-vars": "warn",
+    "no-unused-vars": [
+      "warn",
+      {
+        "args": "all",
+        "argsIgnorePattern": "^_",
+        "caughtErrors": "all",
+        "caughtErrorsIgnorePattern": "^_",
+        "destructuredArrayIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ],
     "no-console": "warn",
     "func-names": "off",
     "no-process-exit": "off",
