@@ -9,6 +9,16 @@ export const publicRoutes = ['/confirm-email']
 export const authRoutes = ['/login', '/register', '/error']
 
 /**
+ * Admin routes
+ */
+export const adminRoutes = ['/admin']
+
+/**
+ * BE routes
+ */
+export const beRoutes = ['/api/user', '/api/admin']
+
+/**
  * API auth routes
  */
 export const apiAuthRoutes = '/api/auth'

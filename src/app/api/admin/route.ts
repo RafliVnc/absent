@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ data: user }, { status: 200 })
   } catch (e) {
     if (e instanceof Error) {
-      return NextResponse.json({ error: e.message }, { status: 500 })
+      return NextResponse.json({ message: e.message }, { status: 500 })
     }
   }
 }

@@ -1,14 +1,25 @@
 import { getToken } from 'next-auth/jwt'
-import { NextResponse } from 'next/server'
-import { apiAuthRoutes, authRoutes, DEFAULT_LOGIN_REDIRECT, noSiteRoutes, publicRoutes } from './routes'
+import { NextRequest, NextResponse } from 'next/server'
+import {
+  adminRoutes,
+  apiAuthRoutes,
+  authRoutes,
+  beRoutes,
+  DEFAULT_LOGIN_REDIRECT,
+  noSiteRoutes,
+  publicRoutes
+} from './routes'
+import { UserRole } from '@prisma/client'
 
-export async function middleware(req: any) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
-  const isLoggedin = await getToken({ req })
+  const token = await getToken({ req })
 
   const isApiAuthRoute = pathname.startsWith(apiAuthRoutes)
+  const isBeRoute = beRoutes.some(route => pathname.startsWith(route))
   const isPublicRoutes = publicRoutes.includes(pathname)
   const isAuthRoutes = authRoutes.includes(pathname)
+  const isAdminRoutes = adminRoutes.includes(pathname)
   const isNoSiteRoutes = noSiteRoutes.includes(pathname)
 
   if (isApiAuthRoute) {
@@ -20,15 +31,23 @@ export async function middleware(req: any) {
   }
 
   if (isAuthRoutes) {
-    if (isLoggedin) {
+    if (token) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, req.url))
     }
     return
   }
 
-  if (!isPublicRoutes && !isLoggedin) {
+  if (!isPublicRoutes && !token) {
+    if (isBeRoute) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    }
     return Response.redirect(new URL('/login', req.url))
   }
+
+  if (token?.user.role === UserRole.USER && isAdminRoutes) {
+    return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, req.url))
+  }
+
   return NextResponse.next()
 }
 

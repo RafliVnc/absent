@@ -2,21 +2,32 @@
 
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { faBars, faHouse, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { UserRole } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
-const menu = [
+interface MenuProps {
+  label: string
+  link: string
+  icon: any
+  access: UserRole[]
+}
+
+const menu: MenuProps[] = [
   {
     label: 'Home',
     link: '/home',
-    icon: faHouse
+    icon: faHouse,
+    access: [UserRole.USER, UserRole.ADMIN]
   },
   {
     label: 'Admin',
     link: '/admin',
-    icon: faUser
+    icon: faUser,
+    access: [UserRole.ADMIN]
   }
 ]
 
@@ -24,6 +35,9 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
   const route = useRouter()
   const location = usePathname()
+  const { user } = useCurrentUser()
+
+  const authorizeMenu: MenuProps[] = menu.filter(item => item.access.includes(user?.role as UserRole))
 
   return (
     <aside
@@ -33,7 +47,7 @@ export default function Sidebar() {
         <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} className="mb-2">
           <FontAwesomeIcon icon={faBars} className="size-5" />
         </Button>
-        {menu.map(({ label, link, icon }) => (
+        {authorizeMenu.map(({ label, link, icon }) => (
           <TooltipProvider key={label} delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>

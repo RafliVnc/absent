@@ -46,11 +46,6 @@ export default function FormLogin() {
       password: values.password
     })
     if (!result?.ok) {
-      toast({
-        title: `${result?.error}`,
-        variant: 'destructive',
-        duration: 2000
-      })
       setError(String(result?.error))
       return
     }

@@ -8,7 +8,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ data: user }, { status: 201 })
   } catch (e) {
     if (e instanceof Error) {
-      return NextResponse.json({ error: e.message }, { status: 500 })
+      return NextResponse.json({ message: e.message }, { status: 500 })
     }
   }
 }

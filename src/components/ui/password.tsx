@@ -31,7 +31,7 @@ export default function PasswordInput<T extends FieldValues>({ control, title, n
                 variant="ghost"
                 size="icon"
                 type="button"
-                className="absolute right-4 top-1/2 size-6 -translate-y-1/2 text-gray-700"
+                className={`absolute right-4 top-1/2 size-6 -translate-y-1/2 ${showPassword ? 'text-gray-500' : 'text-gray-700'}`}
                 onClick={handleTogglePassword}
               >
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />

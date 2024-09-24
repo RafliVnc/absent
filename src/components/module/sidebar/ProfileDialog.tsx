@@ -63,8 +63,8 @@ export default function ProfileDialog({
       toast({ title: 'Profile updated', variant: 'success', duration: 2000 })
       setOpen(false)
     } else {
-      const { error } = await response.json()
-      toast({ title: error, variant: 'destructive', duration: 2000 })
+      const { message } = await response.json()
+      toast({ title: message, variant: 'destructive', duration: 2000 })
     }
   }
   const handleUpdatePassword = async (data: z.infer<typeof updatePasswordSchema>) => {
@@ -79,8 +79,8 @@ export default function ProfileDialog({
       formPassword.reset()
       setOpen(false)
     } else {
-      const { error } = await response.json()
-      toast({ title: error, variant: 'destructive', duration: 2000 })
+      const { message } = await response.json()
+      toast({ title: message, variant: 'destructive', duration: 2000 })
     }
   }
 
