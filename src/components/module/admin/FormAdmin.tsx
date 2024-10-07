@@ -45,12 +45,12 @@ export default function FormAdmin({
             </FormItem>
           )}
         />
-        <PasswordInput<z.infer<typeof createAdminSchema>> control={form.control} name="password" title="Password" />
-        <PasswordInput<z.infer<typeof createAdminSchema>>
-          control={form.control}
-          name="confirmPassword"
-          title="Confirm Password"
-        />
+        {!form.getValues('id') && (
+          <>
+            <PasswordInput control={form.control} name="password" title="Password" />
+            <PasswordInput control={form.control} name="confirmPassword" title="Confirm Password" />
+          </>
+        )}
         <div className="flex gap-4">
           <Button
             className="mt-4 w-full"

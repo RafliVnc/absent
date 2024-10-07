@@ -33,3 +33,24 @@ export const createAdmin = async (data: Prisma.UserCreateInput): Promise<User> =
     else throw new Error(e as string)
   }
 }
+
+export const updateAdmin = async (id: string, data: Prisma.UserUpdateInput): Promise<User> => {
+  try {
+    const user = await userModal.getUserById(id)
+    if (!user) throw new Error('User not found')
+
+    const count = await userModal.countUserbyEmail(user.email!)
+
+    if (count > 0 && user.email !== data.email) throw new Error('Email already exists')
+
+    const newUser = await userModal.updateUser(id, {
+      name: data.name,
+      email: data.email
+    })
+
+    return newUser
+  } catch (e) {
+    if (e instanceof Error) throw e
+    else throw new Error(e as string)
+  }
+}

@@ -18,7 +18,7 @@ import { UserWitoutPassword } from '@/app/api/(modal)/userModal'
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columns: ColumnDef<UserWitoutPassword>[] = [
+export const columns = (handleUpdate: (_data: UserWitoutPassword) => void): ColumnDef<UserWitoutPassword>[] => [
   {
     accessorKey: 'id',
     header: () => <div className="text-center">No</div>,
@@ -73,8 +73,8 @@ export const columns: ColumnDef<UserWitoutPassword>[] = [
                 Copy Admin ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View Admin details</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleUpdate(Admin)}>Edit Profile</DropdownMenuItem>
+              <DropdownMenuItem>Reset Password</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

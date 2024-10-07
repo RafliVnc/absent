@@ -14,11 +14,12 @@ import { createAdminSchema } from '@/schema/adminSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useToast } from '@/components/ui/use-toast'
+import { UserWitoutPassword } from '@/app/api/(modal)/userModal'
 
 export default function TableAdmin() {
-  const { table, isLoading, reload } = useTable('api/admin', { key: 'admin', columns })
   const [isOpen, setOpen] = useState(false)
   const { toast } = useToast()
+  const { table, isLoading, reload } = useTable('api/admin', { key: 'admin', columns: columns(handleUpdate) })
 
   const form = useForm<z.infer<typeof createAdminSchema>>({
     resolver: zodResolver(createAdminSchema),
@@ -30,15 +31,38 @@ export default function TableAdmin() {
     }
   })
 
+  function handleUpdate(data: UserWitoutPassword) {
+    form.reset({
+      id: data.id,
+      name: data.name || '',
+      email: data.email || ''
+    })
+    setOpen(true)
+  }
+
   const handleSubmit = async (data: z.infer<typeof createAdminSchema>) => {
-    const response = await fetch('/api/admin', {
-      method: 'POST',
+    const isUpdate = !!form.getValues('id')
+    if (!isUpdate) {
+      const password = form.getValues('password')
+      const confirmPassword = form.getValues('confirmPassword')
+
+      if (!password || !confirmPassword) {
+        form.setError('password', { message: 'Password is required' })
+        form.setError('confirmPassword', { message: 'Password is required' })
+        return
+      }
+    }
+
+    const url = isUpdate ? `/api/admin/${data.id}` : '/api/admin'
+
+    const response = await fetch(url, {
+      method: isUpdate ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(isUpdate ? { id: data.id, name: data.name, email: data.email } : data)
     })
 
     if (response.ok) {
-      toast({ title: 'Admin created', variant: 'success', duration: 2000 })
+      toast({ title: isUpdate ? 'Admin updated' : 'Admin created', variant: 'success', duration: 2000 })
       reload()
       setOpen(false)
       form.reset()
@@ -48,16 +72,26 @@ export default function TableAdmin() {
     }
   }
 
+  const handleClose = () => {
+    setOpen(false)
+    form.reset({
+      id: '',
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    })
+  }
   return (
     <div className="mx-8 space-y-4 py-10">
       <Button onClick={() => setOpen(true)}>
         <FontAwesomeIcon icon={faPlus} />
       </Button>
       <DataTable isLoading={isLoading} table={table} />
-      <Dialog open={isOpen} onOpenChange={setOpen}>
+      <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent aria-describedby={undefined}>
           <DialogHeader>
-            <DialogTitle>Cretae Admin</DialogTitle>
+            <DialogTitle>{!!form.getValues('id') ? 'Update Admin' : 'Create Admin'}</DialogTitle>
           </DialogHeader>
           <FormAdmin form={form} handleSubmit={handleSubmit} setOpen={setOpen} />
         </DialogContent>
