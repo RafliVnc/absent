@@ -10,9 +10,10 @@ export interface PasswordProps<T extends FieldValues> {
   control: Control<T>
   title: string
   name: Path<T>
+  error?: boolean
 }
 
-export default function PasswordInput<T extends FieldValues>({ control, title, name }: PasswordProps<T>) {
+export default function PasswordInput<T extends FieldValues>({ control, title, name, error }: PasswordProps<T>) {
   const [showPassword, setShowPassword] = useState(false)
 
   const handleTogglePassword = () => {
@@ -36,7 +37,7 @@ export default function PasswordInput<T extends FieldValues>({ control, title, n
               >
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
               </Button>
-              <Input placeholder="Password" type={showPassword ? 'text' : 'password'} {...field} />
+              <Input placeholder="Password" type={showPassword ? 'text' : 'password'} error={error} {...field} />
             </div>
           </FormControl>
           <FormMessage />

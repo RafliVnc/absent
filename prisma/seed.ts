@@ -6,7 +6,7 @@ const userData: Prisma.UserCreateInput[] = [
   {
     name: 'admin',
     email: 'admin@email.com',
-    role: 'ADMIN',
+    role: 'SUPERADMIN',
     emailVerified: new Date()
   }
 ]

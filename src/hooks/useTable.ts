@@ -21,6 +21,7 @@ export const useTable = <TData extends object, TValue>(
   const get = async (page: number, pageSize: number) => {
     try {
       const { data } = await fetch(`${route}?page=${page}&perPage=${pageSize}`).then(res => res.json())
+      setData(data.rows)
       return data
     } catch (e) {
       toast({
@@ -41,11 +42,16 @@ export const useTable = <TData extends object, TValue>(
     placeholderData: { keepPreviousData: true }
   })
 
-  const defaultData = useMemo(() => [], [])
+  const [_data, setData] = useState<TData[]>(data?.rows)
+
+  const defaultData = useMemo(() => {
+    setData(data.rows)
+    return data.rows ?? []
+  }, [data.rows])
 
   const table = useReactTable({
     columns,
-    data: data.rows ?? defaultData,
+    data: _data ?? defaultData,
     manualPagination: true,
     rowCount: data.count,
     getCoreRowModel: getCoreRowModel(),
@@ -57,6 +63,8 @@ export const useTable = <TData extends object, TValue>(
   })
 
   return {
+    setData,
+    data: _data,
     isLoading,
     table,
     reload: () => refetch()

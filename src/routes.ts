@@ -11,12 +11,16 @@ export const authRoutes = ['/login', '/register', '/error']
 /**
  * Admin routes
  */
-export const adminRoutes = ['/admin']
+export const adminRoutes = ['/tuition']
+/**
+ * Super Admin routes
+ */
+export const superAdminRoutes = ['/admin ']
 
 /**
  * BE routes
  */
-export const beRoutes = ['/api/user', '/api/admin']
+export const beRoutes = ['/api/user', '/api/admin', '/api/tuition']
 
 /**
  * API auth routes

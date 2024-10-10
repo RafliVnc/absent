@@ -15,9 +15,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { UserWitoutPassword } from '@/app/api/(modal)/userModal'
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
 export const columns = (handleUpdate: (_data: UserWitoutPassword) => void): ColumnDef<UserWitoutPassword>[] => [
   {
     accessorKey: 'id',
@@ -28,7 +25,8 @@ export const columns = (handleUpdate: (_data: UserWitoutPassword) => void): Colu
           {table.getState().pagination.pageSize * table.getState().pagination.pageIndex + row.index + 1}
         </div>
       )
-    }
+    },
+    size: 50
   },
   {
     accessorKey: 'name',

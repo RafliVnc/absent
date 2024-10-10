@@ -44,7 +44,11 @@ export default function Navbar() {
               <div>
                 <p className="text-base font-medium">{user?.name} </p>
                 <p className="text-end text-xs font-light text-muted-foreground">
-                  {user?.role === UserRole.ADMIN ? 'Admin' : 'User'}
+                  {user?.role === UserRole.ADMIN
+                    ? 'Pelatih'
+                    : user?.role === UserRole.SUPERADMIN
+                      ? 'Kepala Pelatih'
+                      : 'Murid'}
                 </p>
               </div>
               <Avatar>

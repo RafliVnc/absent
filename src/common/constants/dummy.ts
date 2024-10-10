@@ -7,3 +7,11 @@ export const userDummy = {
   role: UserRole.USER,
   image: ''
 }
+
+export const TuitionDummy = {
+  id: 0,
+  name: '',
+  amount: 0,
+  createdAt: new Date(),
+  updatedAt: new Date()
+}

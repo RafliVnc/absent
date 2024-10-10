@@ -16,6 +16,7 @@ datasource db {
 enum UserRole {
   USER
   ADMIN
+  SUPERADMIN
 }
 
 model User {
@@ -27,9 +28,11 @@ model User {
   emailVerified DateTime?
   image         String?
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Account   Account[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Account Account[]
+  Member  Member[]
 }
 
 model Account {
@@ -60,4 +63,48 @@ model VerificationToken {
   expires DateTime
 
   @@unique([email, token])
+}
+
+model Member {
+  id       Int       @id @default(autoincrement())
+  UserId   String
+  height   Int?
+  weight   Int?
+  brithday DateTime?
+  grade    String?
+  gender   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User User @relation(fields: [UserId], references: [id], onDelete: Cascade)
+
+  TuitionHistory TuitionHistory[]
+}
+
+model Tuition {
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  amount BigInt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  TuitionHistory TuitionHistory[]
+}
+
+model TuitionHistory {
+  id        Int     @id @default(autoincrement())
+  MemberId  Int
+  TuitionId Int
+  note      String?
+  amount    Int
+  month     Int
+  year      Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Member  Member  @relation(fields: [MemberId], references: [id])
+  Tuition Tuition @relation(fields: [TuitionId], references: [id])
 }

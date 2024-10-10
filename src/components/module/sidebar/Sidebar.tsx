@@ -3,33 +3,12 @@
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
-import { faBars, faHouse, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { UserRole } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-
-interface MenuProps {
-  label: string
-  link: string
-  icon: any
-  access: UserRole[]
-}
-
-const menu: MenuProps[] = [
-  {
-    label: 'Home',
-    link: '/home',
-    icon: faHouse,
-    access: [UserRole.USER, UserRole.ADMIN]
-  },
-  {
-    label: 'Admin',
-    link: '/admin',
-    icon: faUser,
-    access: [UserRole.ADMIN]
-  }
-]
+import { menu, MenuProps } from '@/common/constants/menu'
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)

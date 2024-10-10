@@ -13,9 +13,10 @@ import { Skeleton } from './skeleton'
 interface DataTableProps<TData, TValue> {
   table: TanStackTable<TData>
   isLoading?: boolean
+  isDisabled?: boolean
 }
 
-export function DataTable<TData, TValue>({ table, isLoading }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ table, isLoading, isDisabled }: DataTableProps<TData, TValue>) {
   return (
     <div>
       <div className="rounded-md border">
@@ -25,7 +26,14 @@ export function DataTable<TData, TValue>({ table, isLoading }: DataTableProps<TD
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      style={{
+                        minWidth: header.column.columnDef.size,
+                        maxWidth: header.column.columnDef.size
+                      }}
+                      className={`px-1`}
+                    >
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   )
@@ -48,7 +56,15 @@ export function DataTable<TData, TValue>({ table, isLoading }: DataTableProps<TD
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    <TableCell
+                      key={cell.id}
+                      style={{
+                        minWidth: cell.column.columnDef.size,
+                        maxWidth: cell.column.columnDef.size
+                      }}
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))}
@@ -76,6 +92,7 @@ export function DataTable<TData, TValue>({ table, isLoading }: DataTableProps<TD
               onValueChange={value => {
                 table.setPageSize(Number(value))
               }}
+              disabled={isDisabled}
             >
               <SelectTrigger className="h-8 w-[70px]">
                 <SelectValue placeholder={table.getState().pagination.pageSize} />
@@ -99,7 +116,7 @@ export function DataTable<TData, TValue>({ table, isLoading }: DataTableProps<TD
               onClick={() => {
                 table.setPageIndex(0)
               }}
-              disabled={!table.getCanPreviousPage()}
+              disabled={!table.getCanPreviousPage() || isDisabled}
             >
               <span className="sr-only">Go to first page</span>
               <FontAwesomeIcon icon={faAnglesLeft} className="size-4" />
@@ -110,7 +127,7 @@ export function DataTable<TData, TValue>({ table, isLoading }: DataTableProps<TD
               onClick={() => {
                 table.previousPage()
               }}
-              disabled={!table.getCanPreviousPage()}
+              disabled={!table.getCanPreviousPage() || isDisabled}
             >
               <span className="sr-only">Go to previous page</span>
               <FontAwesomeIcon icon={faAngleLeft} className="size-4" />
@@ -121,7 +138,7 @@ export function DataTable<TData, TValue>({ table, isLoading }: DataTableProps<TD
               onClick={() => {
                 table.nextPage()
               }}
-              disabled={!table.getCanNextPage()}
+              disabled={!table.getCanNextPage() || isDisabled}
             >
               <span className="sr-only">Go to next page</span>
               <FontAwesomeIcon icon={faAngleRight} className="size-4" />
@@ -132,7 +149,7 @@ export function DataTable<TData, TValue>({ table, isLoading }: DataTableProps<TD
               onClick={() => {
                 table.setPageIndex(table.getPageCount() - 1)
               }}
-              disabled={!table.getCanNextPage()}
+              disabled={!table.getCanNextPage() || isDisabled}
             >
               <span className="sr-only">Go to last page</span>
               <FontAwesomeIcon icon={faAnglesRight} className="size-4" />

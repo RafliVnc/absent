@@ -91,9 +91,14 @@ export default function ProfileDialog({
           <DialogTitle>Edit profile</DialogTitle>
         </DialogHeader>
         <Tabs value={activeTab} onValueChange={value => setActiveTab(value)}>
-          <TabsList className={`grid w-full ${user.role === UserRole.ADMIN ? 'grid-cols-2' : 'grid-cols-1'}`}>
+          <TabsList
+            className={`grid w-full ${
+              user.role === UserRole.ADMIN || user.role === UserRole.SUPERADMIN ? 'grid-cols-2' : 'grid-cols-1'
+            }`}
+          >
             <TabsTrigger value="account">Account</TabsTrigger>
-            {user.role === UserRole.ADMIN && <TabsTrigger value="password">Password</TabsTrigger>}
+            {user.role === UserRole.ADMIN ||
+              (user.role === UserRole.SUPERADMIN && <TabsTrigger value="password">Password</TabsTrigger>)}
           </TabsList>
           <TabsContent value="account">
             <FormAccount form={formAccount} />

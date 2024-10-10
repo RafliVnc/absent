@@ -26,7 +26,7 @@ export default function FormAdmin({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="John Doe" {...field} />
+                <Input placeholder="John Doe" {...field} error={!!form.formState.errors.name} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -39,7 +39,7 @@ export default function FormAdmin({
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="example@email.com" {...field} />
+                <Input placeholder="example@email.com" {...field} error={!!form.formState.errors.email} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -47,8 +47,18 @@ export default function FormAdmin({
         />
         {!form.getValues('id') && (
           <>
-            <PasswordInput control={form.control} name="password" title="Password" />
-            <PasswordInput control={form.control} name="confirmPassword" title="Confirm Password" />
+            <PasswordInput
+              control={form.control}
+              name="password"
+              title="Password"
+              error={!!form.formState.errors.password}
+            />
+            <PasswordInput
+              control={form.control}
+              name="confirmPassword"
+              title="Confirm Password"
+              error={!!form.formState.errors.confirmPassword}
+            />
           </>
         )}
         <div className="flex gap-4">
