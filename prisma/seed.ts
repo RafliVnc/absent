@@ -1,12 +1,12 @@
 import bcrypt from 'bcrypt'
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient, Prisma, UserRole } from '@prisma/client'
 const prisma = new PrismaClient()
 
 const userData: Prisma.UserCreateInput[] = [
   {
     name: 'admin',
     email: 'admin@email.com',
-    role: 'SUPERADMIN',
+    role: UserRole.HEADCOACH,
     emailVerified: new Date()
   }
 ]

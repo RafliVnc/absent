@@ -7,33 +7,33 @@ import { columns } from './columns'
 import { Button } from '@/components/ui/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { TuitionDummy } from '@/common/constants/dummy'
-import { Tuition } from '@/common/type/tuition'
+import { FeeDummy } from '@/common/constants/dummy'
+import { Fee } from '@/common/type/fee'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { tuitionSchema } from '@/schema/tuitionSchema'
+import { feeSchema } from '@/schema/feeSchema'
 import { z } from 'zod'
 import { useToast } from '@/components/ui/use-toast'
 import { usePopupAlert } from '@/components/ui/popup-alert'
 
-export default function TableTuition() {
+export default function TableFee() {
   const [isOpen, setOpen] = useState(false)
   const [isSubmit, setSubmit] = useState(false)
   const [isDisableEdit, setDisableEdit] = useState(false)
-  const [currentData, setCurrentData] = useState<Tuition>(TuitionDummy)
+  const [currentData, setCurrentData] = useState<Fee>(FeeDummy)
   const { toast } = useToast()
   const alert = usePopupAlert()
 
-  const form = useForm<z.infer<typeof tuitionSchema>>({
-    resolver: zodResolver(tuitionSchema),
+  const form = useForm<z.infer<typeof feeSchema>>({
+    resolver: zodResolver(feeSchema),
     defaultValues: {
       name: '',
       amount: 0
     }
   })
 
-  const { table, isLoading, reload, data, setData } = useTable('api/tuition', {
-    key: 'tuition',
+  const { table, isLoading, reload, data, setData } = useTable('api/fee', {
+    key: 'fee',
     columns: columns(
       isOpen,
       onCancel,
@@ -52,29 +52,29 @@ export default function TableTuition() {
   }, [data, currentData?.id])
 
   function onAddNew() {
-    setData([TuitionDummy, ...data])
+    setData([FeeDummy, ...data])
     setOpen(true)
   }
 
   function onCancel() {
     if (isOpen && data[0].id === 0) data.splice(0, 1)
     setData([...data])
-    form.reset(TuitionDummy)
-    setCurrentData(TuitionDummy)
+    form.reset(FeeDummy)
+    setCurrentData(FeeDummy)
     setOpen(false)
   }
 
-  function handleUpdate(data: Tuition) {
+  function handleUpdate(data: Fee) {
     form.reset(data)
     setCurrentData(data)
     setOpen(true)
   }
 
-  async function handleSubmit(data: z.infer<typeof tuitionSchema>) {
+  async function handleSubmit(data: z.infer<typeof feeSchema>) {
     setSubmit(true)
     const isUpdate = !!form.getValues('id')
 
-    const url = isUpdate ? `/api/tuition/${data.id}` : '/api/tuition'
+    const url = isUpdate ? `/api/fee/${data.id}` : '/api/fee'
 
     const response = await fetch(url, {
       method: isUpdate ? 'PUT' : 'POST',
@@ -86,8 +86,8 @@ export default function TableTuition() {
       toast({ title: isUpdate ? 'Iuran diperbarui' : 'Iuran dibuat', variant: 'success', duration: 2000 })
       reload()
       setOpen(false)
-      setCurrentData(TuitionDummy)
-      form.reset(TuitionDummy)
+      setCurrentData(FeeDummy)
+      form.reset(FeeDummy)
       setSubmit(false)
     } else {
       const { message } = await response.json()
@@ -100,7 +100,7 @@ export default function TableTuition() {
     alert.setOpen(!alert.isOpen)
     alert.handlePopup({
       onSubmit: async () => {
-        const response = await fetch(`/api/tuition/${id}`, { method: 'DELETE' })
+        const response = await fetch(`/api/fee/${id}`, { method: 'DELETE' })
         if (response.ok) {
           toast({ title: 'Iuran berhasil dihapus', variant: 'success', duration: 2000 })
           reload()

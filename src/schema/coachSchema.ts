@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const createAdminSchema = z
+export const createCoachSchema = z
   .object({
     id: z.string().optional(),
     name: z.string().min(1, { message: 'Please enter your name' }),
@@ -19,7 +19,7 @@ export const createAdminSchema = z
     path: ['confirmPassword']
   })
 
-export const updateAdminSchema = z.object({
+export const updateCoachSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: 'Please enter your name' }),
   email: z.string().email({ message: 'Please enter a valid email address' })

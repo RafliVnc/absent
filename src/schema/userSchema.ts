@@ -7,7 +7,7 @@ export const userSchema = z.object({
   email: z.string().email(),
   emailVerified: z.date().optional(),
   image: z.string().max(200).optional(),
-  role: z.nativeEnum(UserRole).default(UserRole.USER),
+  role: z.nativeEnum(UserRole).default(UserRole.ATHLETE),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional()
 })

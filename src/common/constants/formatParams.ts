@@ -9,4 +9,4 @@ export interface UserQueryParams extends DefaultQueryParams {
   role?: UserRole
 }
 
-export interface TuitionQueryParams extends DefaultQueryParams {}
+export interface FeeQueryParams extends DefaultQueryParams {}

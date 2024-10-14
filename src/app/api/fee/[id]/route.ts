@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import * as tuitionService from '@/app/api/(service)/tuitionService'
+import * as feeService from '@/app/api/(service)/feeService'
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+  ;(BigInt.prototype as any).toJSON = function () {
+    return Number(this)
+  }
   try {
     const data = await req.json()
-    const tuition = await tuitionService.updateTuition(+params.id, data)
+    const fee = await feeService.updateFee(+params.id, data)
 
-    return NextResponse.json({ data: tuition }, { status: 201 })
+    return NextResponse.json({ data: fee }, { status: 201 })
   } catch (e) {
     if (e instanceof Error) {
       return NextResponse.json({ message: e.message }, { status: 500 })
@@ -15,9 +18,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+  ;(BigInt.prototype as any).toJSON = function () {
+    return Number(this)
+  }
   try {
-    const Tuition = await tuitionService.deleteTuition(+params.id)
-    return NextResponse.json({ data: Tuition }, { status: 201 })
+    const Fee = await feeService.deleteFee(+params.id)
+    return NextResponse.json({ data: Fee }, { status: 201 })
   } catch (e) {
     if (e instanceof Error) {
       return NextResponse.json({ message: e.message }, { status: 500 })

@@ -8,21 +8,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import FormAdmin from './FormAdmin'
+import FormCoach from './FormCoach'
 import { useForm } from 'react-hook-form'
-import { createAdminSchema } from '@/schema/adminSchema'
+import { createCoachSchema } from '@/schema/coachSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useToast } from '@/components/ui/use-toast'
 import { UserWitoutPassword } from '@/app/api/(modal)/userModal'
 
-export default function TableAdmin() {
+export default function TableCoach() {
   const [isOpen, setOpen] = useState(false)
   const { toast } = useToast()
-  const { table, isLoading, reload } = useTable('api/admin', { key: 'admin', columns: columns(handleUpdate) })
+  const { table, isLoading, reload } = useTable('api/coach', { key: 'coach', columns: columns(handleUpdate) })
 
-  const form = useForm<z.infer<typeof createAdminSchema>>({
-    resolver: zodResolver(createAdminSchema),
+  const form = useForm<z.infer<typeof createCoachSchema>>({
+    resolver: zodResolver(createCoachSchema),
     defaultValues: {
       name: '',
       email: '',
@@ -40,7 +40,7 @@ export default function TableAdmin() {
     setOpen(true)
   }
 
-  const handleSubmit = async (data: z.infer<typeof createAdminSchema>) => {
+  const handleSubmit = async (data: z.infer<typeof createCoachSchema>) => {
     const isUpdate = !!form.getValues('id')
 
     if (!isUpdate) {
@@ -48,7 +48,7 @@ export default function TableAdmin() {
       if (!validation) return
     }
 
-    const url = isUpdate ? `/api/admin/${data.id}` : '/api/admin'
+    const url = isUpdate ? `/api/coach/${data.id}` : '/api/coach'
 
     const response = await fetch(url, {
       method: isUpdate ? 'PUT' : 'POST',
@@ -57,7 +57,7 @@ export default function TableAdmin() {
     })
 
     if (response.ok) {
-      toast({ title: isUpdate ? 'Admin updated' : 'Admin created', variant: 'success', duration: 2000 })
+      toast({ title: isUpdate ? 'Coach updated' : 'Coach created', variant: 'success', duration: 2000 })
       reload()
       setOpen(false)
       form.reset()
@@ -86,9 +86,9 @@ export default function TableAdmin() {
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent aria-describedby={undefined}>
           <DialogHeader>
-            <DialogTitle>{!!form.getValues('id') ? 'Update Admin' : 'Create Admin'}</DialogTitle>
+            <DialogTitle>{!!form.getValues('id') ? 'Update Coach' : 'Create Coach'}</DialogTitle>
           </DialogHeader>
-          <FormAdmin form={form} handleSubmit={handleSubmit} setOpen={setOpen} />
+          <FormCoach form={form} handleSubmit={handleSubmit} setOpen={setOpen} />
         </DialogContent>
       </Dialog>
     </div>

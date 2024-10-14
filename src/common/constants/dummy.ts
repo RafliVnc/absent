@@ -4,11 +4,11 @@ export const userDummy = {
   id: '',
   name: '',
   email: '',
-  role: UserRole.USER,
+  role: UserRole.ATHLETE,
   image: ''
 }
 
-export const TuitionDummy = {
+export const FeeDummy = {
   id: 0,
   name: '',
   amount: 0,

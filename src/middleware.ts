@@ -1,14 +1,14 @@
 import { getToken } from 'next-auth/jwt'
 import { NextRequest, NextResponse } from 'next/server'
 import {
-  adminRoutes,
+  coachRoutes,
   apiAuthRoutes,
   authRoutes,
   beRoutes,
   DEFAULT_LOGIN_REDIRECT,
   noSiteRoutes,
   publicRoutes,
-  superAdminRoutes
+  headCoachRoutes
 } from './routes'
 import { UserRole } from '@prisma/client'
 
@@ -20,8 +20,8 @@ export async function middleware(req: NextRequest) {
   const isBeRoute = beRoutes.some(route => pathname.startsWith(route))
   const isPublicRoutes = publicRoutes.includes(pathname)
   const isAuthRoutes = authRoutes.includes(pathname)
-  const isAdminRoutes = adminRoutes.includes(pathname)
-  const isSuperAdminRoutes = superAdminRoutes.includes(pathname)
+  const isCoachRoutes = coachRoutes.includes(pathname)
+  const isHeadCoachRoutes = headCoachRoutes.includes(pathname)
   const isNoSiteRoutes = noSiteRoutes.includes(pathname)
 
   if (isApiAuthRoute) {
@@ -46,11 +46,11 @@ export async function middleware(req: NextRequest) {
     return Response.redirect(new URL('/login', req.url))
   }
 
-  if (token?.user.role === UserRole.ADMIN && isSuperAdminRoutes) {
+  if (token?.user.role === UserRole.COACH && isHeadCoachRoutes) {
     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, req.url))
   }
 
-  if (token?.user.role === UserRole.USER && isAdminRoutes) {
+  if (token?.user.role === UserRole.ATHLETE && isCoachRoutes) {
     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, req.url))
   }
 

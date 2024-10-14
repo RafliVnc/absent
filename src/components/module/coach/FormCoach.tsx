@@ -2,18 +2,18 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import PasswordInput from '@/components/ui/password'
-import { createAdminSchema } from '@/schema/adminSchema'
+import { createCoachSchema } from '@/schema/coachSchema'
 import React from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 
-export default function FormAdmin({
+export default function FormCoach({
   form,
   handleSubmit,
   setOpen
 }: {
-  form: UseFormReturn<z.infer<typeof createAdminSchema>>
-  handleSubmit: (_data: z.infer<typeof createAdminSchema>) => void
+  form: UseFormReturn<z.infer<typeof createCoachSchema>>
+  handleSubmit: (_data: z.infer<typeof createCoachSchema>) => void
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   return (

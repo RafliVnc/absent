@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import * as adminService from '@/app/api/(service)/adminService'
+import * as coachService from '@/app/api/(service)/coachService'
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const data = await req.json()
-    const user = await adminService.updateAdmin(params.id, data)
+    const user = await coachService.updateCoach(params.id, data)
     return NextResponse.json({ data: user }, { status: 201 })
   } catch (e) {
     if (e instanceof Error) {

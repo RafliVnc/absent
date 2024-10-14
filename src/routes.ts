@@ -9,18 +9,18 @@ export const publicRoutes = ['/confirm-email']
 export const authRoutes = ['/login', '/register', '/error']
 
 /**
- * Admin routes
+ * Coach routes
  */
-export const adminRoutes = ['/tuition']
+export const coachRoutes = ['/fee']
 /**
- * Super Admin routes
+ * Super Coach routes
  */
-export const superAdminRoutes = ['/admin ']
+export const headCoachRoutes = ['/coach ']
 
 /**
  * BE routes
  */
-export const beRoutes = ['/api/user', '/api/admin', '/api/tuition']
+export const beRoutes = ['/api/user', '/api/coach', '/api/fee']
 
 /**
  * API auth routes

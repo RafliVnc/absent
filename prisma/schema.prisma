@@ -14,9 +14,9 @@ datasource db {
 }
 
 enum UserRole {
-  USER
-  ADMIN
-  SUPERADMIN
+  ATHLETE
+  COACH
+  HEADCOACH
 }
 
 model User {
@@ -24,7 +24,7 @@ model User {
   name          String
   email         String    @unique
   password      String?
-  role          UserRole  @default(USER)
+  role          UserRole  @default(ATHLETE)
   emailVerified DateTime?
   image         String?
 
@@ -32,7 +32,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   Account Account[]
-  Member  Member[]
+  Athlete Athlete[]
 }
 
 model Account {
@@ -65,7 +65,7 @@ model VerificationToken {
   @@unique([email, token])
 }
 
-model Member {
+model Athlete {
   id       Int       @id @default(autoincrement())
   UserId   String
   height   Int?
@@ -79,10 +79,10 @@ model Member {
 
   User User @relation(fields: [UserId], references: [id], onDelete: Cascade)
 
-  TuitionHistory TuitionHistory[]
+  FeeHistory FeeHistory[]
 }
 
-model Tuition {
+model Fee {
   id     Int    @id @default(autoincrement())
   name   String @unique
   amount BigInt
@@ -90,13 +90,13 @@ model Tuition {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  TuitionHistory TuitionHistory[]
+  FeeHistory FeeHistory[]
 }
 
-model TuitionHistory {
+model FeeHistory {
   id        Int     @id @default(autoincrement())
-  MemberId  Int
-  TuitionId Int
+  AthleteId Int
+  FeeId     Int
   note      String?
   amount    Int
   month     Int
@@ -105,6 +105,6 @@ model TuitionHistory {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Member  Member  @relation(fields: [MemberId], references: [id])
-  Tuition Tuition @relation(fields: [TuitionId], references: [id])
+  Athlete Athlete @relation(fields: [AthleteId], references: [id])
+  Fee     Fee     @relation(fields: [FeeId], references: [id])
 }

@@ -3,15 +3,15 @@ import { UserQueryParams } from '@/common/constants/formatParams'
 import { Prisma, User, UserRole } from '@prisma/client'
 import bcrypt from 'bcrypt'
 
-export const getAdminWithPagination = async (
+export const getCoachWithPagination = async (
   params: UserQueryParams
 ): Promise<{ rows: userModal.UserWitoutPassword[]; count: number }> => {
-  const user = await userModal.getPagination({ ...params, role: UserRole.ADMIN })
+  const user = await userModal.getPagination({ ...params, role: UserRole.COACH })
 
   return user
 }
 
-export const createAdmin = async (data: Prisma.UserCreateInput): Promise<User> => {
+export const createCoach = async (data: Prisma.UserCreateInput): Promise<User> => {
   try {
     const { name, email, password } = data
     const count = await userModal.countUserbyEmail(email!)
@@ -24,7 +24,7 @@ export const createAdmin = async (data: Prisma.UserCreateInput): Promise<User> =
       name,
       email,
       password: hashPassword,
-      role: UserRole.ADMIN
+      role: UserRole.COACH
     })
 
     return createdUser
@@ -34,7 +34,7 @@ export const createAdmin = async (data: Prisma.UserCreateInput): Promise<User> =
   }
 }
 
-export const updateAdmin = async (id: string, data: Prisma.UserUpdateInput): Promise<User> => {
+export const updateCoach = async (id: string, data: Prisma.UserUpdateInput): Promise<User> => {
   try {
     const user = await userModal.getUserById(id)
     if (!user) throw new Error('User not found')

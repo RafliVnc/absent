@@ -13,23 +13,31 @@ import { Separator } from '@/components/ui/separator'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { useToast } from '@/components/ui/use-toast'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { loginSchema } from '@/schema/authSchema'
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function FormLogin() {
   const { toast } = useToast()
   const router = useRouter()
-  const SearchParams = useSearchParams()
+  const [searchParams] = useState(
+    () => new URLSearchParams(typeof window === 'undefined' ? '' : window.location.search)
+  )
   const urlError =
-    (SearchParams.get('error') === 'OAuthAccountNotLinked' && 'Account already linked use another Email') ||
-    (SearchParams.get('error') === 'Cant Login' && 'Your email not registered')
+    (searchParams.get('error') === 'OAuthAccountNotLinked' && 'Account already linked use another Email') ||
+    (searchParams.get('error') === 'Cant Login' && 'Your email not registered')
 
   const [isLoading, setLoading] = useState(false)
-  const [error, setError] = useState<string | undefined>()
+  const [error, setError] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    if (urlError) {
+      setError(urlError)
+    }
+  }, [urlError])
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -87,10 +95,10 @@ export default function FormLogin() {
         />
         <PasswordInput<z.infer<typeof loginSchema>> control={form.control} name="password" title="Password" />
         <div>
-          {(urlError || error) && (
+          {error && (
             <Alert variant="destructive">
               <FontAwesomeIcon icon={faCircleInfo} className="size-4" />
-              <AlertDescription>{urlError || error}</AlertDescription>
+              <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
           <Button className="mt-4 w-full" type="submit" disabled={form.formState.isSubmitting}>

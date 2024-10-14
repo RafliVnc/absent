@@ -32,12 +32,12 @@ export const columns = (handleUpdate: (_data: UserWitoutPassword) => void): Colu
     accessorKey: 'name',
     header: 'Name',
     cell: ({ row }) => {
-      const Admin = row.original
+      const Coach = row.original
 
       return (
         <div className="text-start">
-          <p className="text-sm">{Admin.name}</p>
-          <p className="text-xs text-muted-foreground">{Admin.role}</p>
+          <p className="text-sm">{Coach.name}</p>
+          <p className="text-xs text-muted-foreground">{Coach.role}</p>
         </div>
       )
     }
@@ -54,7 +54,7 @@ export const columns = (handleUpdate: (_data: UserWitoutPassword) => void): Colu
     id: 'actions',
     header: () => <div className="text-center">Action</div>,
     cell: ({ row }) => {
-      const Admin = row.original
+      const Coach = row.original
 
       return (
         <div className="flex justify-center">
@@ -67,11 +67,11 @@ export const columns = (handleUpdate: (_data: UserWitoutPassword) => void): Colu
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(String(Admin.id))}>
-                Copy Admin ID
+              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(String(Coach.id))}>
+                Copy Coach ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleUpdate(Admin)}>Edit Profile</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleUpdate(Coach)}>Edit Profile</DropdownMenuItem>
               <DropdownMenuItem>Reset Password</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
