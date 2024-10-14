@@ -4,13 +4,14 @@ import { ColumnDef } from '@tanstack/react-table'
 
 import { Button } from '@/components/ui/button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheck, faPen, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { Tuition } from '@/common/type/tuition'
 import { tuitionSchema } from '@/schema/tuitionSchema'
 import { UseFormReturn } from 'react-hook-form'
 import { z } from 'zod'
 import TextField from '@/components/ui/text-field'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Pencil, Trash } from 'lucide-react'
+import { formatToIDR } from '@/common/constants/utils'
 
 export const columns = (
   isOpen: boolean,
@@ -82,7 +83,7 @@ export const columns = (
         />
       ) : (
         <div className="text-start">
-          <p className="text-sm">IDR {Tuition.amount}</p>
+          <p className="text-sm">{formatToIDR(Tuition.amount)}</p>
         </div>
       )
     }
@@ -96,7 +97,7 @@ export const columns = (
       return isOpen && (Tuition.id === 0 || Tuition.id === currentData.id) ? (
         <div className="flex justify-center">
           {isSubmit ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <Loader2 className="mr-2 size-4 animate-spin" />
           ) : (
             <>
               <Button variant="ghost" className="px-2">
@@ -116,7 +117,7 @@ export const columns = (
             disabled={isOpen && isDisableEdit}
             onClick={() => handleUpdate(Tuition)}
           >
-            <FontAwesomeIcon size="lg" icon={faPen} />
+            <Pencil className="size-5" />
           </Button>
           <Button
             variant="ghost"
@@ -124,7 +125,7 @@ export const columns = (
             disabled={isOpen && isDisableEdit}
             onClick={() => handleDelete(Tuition.id)}
           >
-            <FontAwesomeIcon size="lg" icon={faTrash} />
+            <Trash className="size-5" />
           </Button>
         </div>
       )

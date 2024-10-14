@@ -9,6 +9,7 @@ import { UserRole } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { menu, MenuProps } from '@/common/constants/menu'
+import { cn } from '@/lib/utils'
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -20,21 +21,24 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`flex min-h-screen justify-center ${isOpen ? `w-[15%]` : `w-[5%]`} transition-width bg-primary p-4 text-white duration-300`}
+      className={cn(
+        'transition-width flex min-h-screen bg-primary py-4 text-white duration-300 ease-in-out',
+        isOpen ? 'w-[15%]' : 'w-[5%]'
+      )}
     >
-      <div className="fixed flex flex-col items-center justify-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} className="mb-2">
-          <FontAwesomeIcon icon={faBars} className="size-5" />
-        </Button>
+      <div className="flex w-full flex-col gap-4">
+        <div className="flex w-full items-center justify-center">
+          <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} className="mb-2">
+            <FontAwesomeIcon icon={faBars} className="size-5" />
+          </Button>
+        </div>
         {authorizeMenu.map(({ label, link, icon }) => (
           <TooltipProvider key={label} delayDuration={300}>
             <Tooltip>
-              <TooltipTrigger asChild>
+              <TooltipTrigger asChild className="mx-auto w-[70%]">
                 <Button
-                  variant="ghost"
-                  className={
-                    location === link ? 'mx-3 bg-primary-foreground text-primary transition-all duration-100' : ''
-                  }
+                  variant="uncenter"
+                  className={location === link ? 'bg-primary-foreground text-left text-primary' : ''}
                   size={isOpen ? 'default' : 'icon'}
                   onClick={() => route.push(link)}
                 >

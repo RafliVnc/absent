@@ -114,7 +114,7 @@ export default function TableTuition() {
   }
 
   return (
-    <div className="mx-8 space-y-4 py-10">
+    <div className="mt-8 space-y-4">
       <Button onClick={() => onAddNew()} disabled={(isOpen || isLoading) && isDisableEdit}>
         Tambah <FontAwesomeIcon icon={faPlus} className="ml-2" />
       </Button>

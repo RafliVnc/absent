@@ -1,5 +1,11 @@
 import { UserRole } from '@prisma/client'
-import { faCalendarDay, faHouse, faUser } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCalendarDay,
+  faHouse,
+  faMoneyBill,
+  faUserGroup,
+  faUsersGear
+} from '@fortawesome/free-solid-svg-icons'
 
 export interface MenuProps {
   label: string
@@ -16,15 +22,27 @@ export const menu: MenuProps[] = [
     access: [UserRole.USER, UserRole.ADMIN, UserRole.SUPERADMIN]
   },
   {
-    label: 'Admin',
+    label: 'Pelatih',
     link: '/admin',
-    icon: faUser,
+    icon: faUserGroup,
     access: [UserRole.SUPERADMIN]
   },
   {
-    label: 'Iuran',
-    link: '/tuition',
+    label: 'Acara',
+    link: '/event',
     icon: faCalendarDay,
+    access: [UserRole.ADMIN, UserRole.SUPERADMIN]
+  },
+  {
+    label: 'Murid',
+    link: '/student',
+    icon: faUsersGear,
+    access: [UserRole.ADMIN, UserRole.SUPERADMIN]
+  },
+  {
+    label: 'Pembayaran',
+    link: '/tuition',
+    icon: faMoneyBill,
     access: [UserRole.ADMIN, UserRole.SUPERADMIN]
   }
 ]

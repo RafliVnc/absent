@@ -42,9 +42,10 @@ export default function TableAdmin() {
 
   const handleSubmit = async (data: z.infer<typeof createAdminSchema>) => {
     const isUpdate = !!form.getValues('id')
+
     if (!isUpdate) {
-      form.trigger(['password', 'confirmPassword'])
-      return
+      const validation = await form.trigger(['password', 'confirmPassword'])
+      if (!validation) return
     }
 
     const url = isUpdate ? `/api/admin/${data.id}` : '/api/admin'

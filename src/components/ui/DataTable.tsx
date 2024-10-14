@@ -5,9 +5,8 @@ import { flexRender, Table as TanStackTable } from '@tanstack/react-table'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table'
 import { Button } from './button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleLeft, faAngleRight, faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons'
 import { Skeleton } from './skeleton'
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
 
 // eslint-disable-next-line no-unused-vars
 interface DataTableProps<TData, TValue> {
@@ -119,7 +118,8 @@ export function DataTable<TData, TValue>({ table, isLoading, isDisabled }: DataT
               disabled={!table.getCanPreviousPage() || isDisabled}
             >
               <span className="sr-only">Go to first page</span>
-              <FontAwesomeIcon icon={faAnglesLeft} className="size-4" />
+              {/* <FontAwesomeIcon icon={faAnglesLeft} className="size-4" /> */}
+              <ChevronsLeft className="size-4" />
             </Button>
             <Button
               variant="outline"
@@ -130,7 +130,7 @@ export function DataTable<TData, TValue>({ table, isLoading, isDisabled }: DataT
               disabled={!table.getCanPreviousPage() || isDisabled}
             >
               <span className="sr-only">Go to previous page</span>
-              <FontAwesomeIcon icon={faAngleLeft} className="size-4" />
+              <ChevronLeft className="size-4" />
             </Button>
             <Button
               variant="outline"
@@ -141,7 +141,7 @@ export function DataTable<TData, TValue>({ table, isLoading, isDisabled }: DataT
               disabled={!table.getCanNextPage() || isDisabled}
             >
               <span className="sr-only">Go to next page</span>
-              <FontAwesomeIcon icon={faAngleRight} className="size-4" />
+              <ChevronRight className="size-4" />
             </Button>
             <Button
               variant="outline"
@@ -152,7 +152,7 @@ export function DataTable<TData, TValue>({ table, isLoading, isDisabled }: DataT
               disabled={!table.getCanNextPage() || isDisabled}
             >
               <span className="sr-only">Go to last page</span>
-              <FontAwesomeIcon icon={faAnglesRight} className="size-4" />
+              <ChevronsRight className="size-4" />
             </Button>
           </div>
         </div>
