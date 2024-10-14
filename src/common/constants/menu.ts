@@ -10,7 +10,7 @@ export interface MenuProps {
 
 export const menu: MenuProps[] = [
   {
-    label: 'Home',
+    label: 'Dashboard',
     link: '/home',
     icon: faHouse,
     access: [UserRole.ATHLETE, UserRole.COACH, UserRole.HEADCOACH]
@@ -28,8 +28,8 @@ export const menu: MenuProps[] = [
     access: [UserRole.COACH, UserRole.HEADCOACH]
   },
   {
-    label: 'Murid',
-    link: '/student',
+    label: 'Atlet',
+    link: '/athlete',
     icon: faUsersGear,
     access: [UserRole.COACH, UserRole.HEADCOACH]
   },

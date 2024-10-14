@@ -30,14 +30,14 @@ export const columns = (handleUpdate: (_data: UserWitoutPassword) => void): Colu
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'Nama Pelatih',
     cell: ({ row }) => {
       const Coach = row.original
 
       return (
         <div className="text-start">
           <p className="text-sm">{Coach.name}</p>
-          <p className="text-xs text-muted-foreground">{Coach.role}</p>
+          <p className="text-xs text-muted-foreground">PELATIH</p>
         </div>
       )
     }
@@ -48,11 +48,11 @@ export const columns = (handleUpdate: (_data: UserWitoutPassword) => void): Colu
   },
   {
     accessorKey: 'createdAt',
-    header: () => <div className="text-start">Created</div>
+    header: () => <div className="text-start">Dibuat</div>
   },
   {
     id: 'actions',
-    header: () => <div className="text-center">Action</div>,
+    header: () => <div className="text-center">Aksi</div>,
     cell: ({ row }) => {
       const Coach = row.original
 
@@ -71,7 +71,7 @@ export const columns = (handleUpdate: (_data: UserWitoutPassword) => void): Colu
                 Copy Coach ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleUpdate(Coach)}>Edit Profile</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleUpdate(Coach)}>Ubah data pelatih</DropdownMenuItem>
               <DropdownMenuItem>Reset Password</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
