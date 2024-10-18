@@ -16,12 +16,6 @@ export const menu: MenuProps[] = [
     access: [UserRole.ATHLETE, UserRole.COACH, UserRole.HEADCOACH]
   },
   {
-    label: 'Pelatih',
-    link: '/coach',
-    icon: faUserGroup,
-    access: [UserRole.HEADCOACH]
-  },
-  {
     label: 'Acara',
     link: '/event',
     icon: faCalendarDay,
@@ -32,6 +26,12 @@ export const menu: MenuProps[] = [
     link: '/athlete',
     icon: faUsersGear,
     access: [UserRole.COACH, UserRole.HEADCOACH]
+  },
+  {
+    label: 'Pelatih',
+    link: '/coach',
+    icon: faUserGroup,
+    access: [UserRole.HEADCOACH]
   },
   {
     label: 'Pembayaran',

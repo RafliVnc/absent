@@ -22,7 +22,7 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(
-        'transition-width flex min-h-screen bg-primary py-4 text-white duration-300 ease-in-out',
+        'transition-width sticky left-0 top-4 z-20 my-4 ml-4 flex h-[95vh] rounded-xl bg-primary py-4 text-white duration-300 ease-in-out',
         isOpen ? 'w-[15%]' : 'w-[5%]'
       )}
     >

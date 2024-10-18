@@ -8,17 +8,17 @@ export default function page() {
     <div className="flex w-full flex-col gap-4 p-6">
       <h2 className="text-2xl font-bold">Pengelolaan Biaya</h2>
       <Card className="w-full px-8 py-10">
-        <Tabs defaultValue="feeFee">
+        <Tabs defaultValue="fee">
           <TabsList className="grid w-[400px] grid-cols-3">
-            <TabsTrigger value="feeFee">Info Biaya</TabsTrigger>
-            <TabsTrigger value="payFee">Atlet</TabsTrigger>
-            <TabsTrigger value="payCoach">Pelatih</TabsTrigger>
+            <TabsTrigger value="fee">Info Biaya</TabsTrigger>
+            <TabsTrigger value="athlet">Atlet</TabsTrigger>
+            <TabsTrigger value="coach">Pelatih</TabsTrigger>
           </TabsList>
-          <TabsContent value="feeFee">
+          <TabsContent value="fee">
             <TableFee />
           </TabsContent>
-          <TabsContent value="payFee">{/* <TableFee /> */}</TabsContent>
-          <TabsContent value="payCoach">{/* <TableFee /> */}</TabsContent>
+          <TabsContent value="athlet">{/* <TableFee /> */}</TabsContent>
+          <TabsContent value="coach">{/* <TableFee /> */}</TabsContent>
         </Tabs>
       </Card>
     </div>
