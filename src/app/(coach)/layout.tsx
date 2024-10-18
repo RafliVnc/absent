@@ -12,7 +12,7 @@ export default function CoachLayout({ children }: CoachLayoutProps) {
       <Sidebar />
       <div className="w-full">
         <Navbar />
-        <main className="flex h-screen overflow-auto">{children}</main>
+        <main className="h-[calc(100vh-4rem)] overflow-auto">{children}</main>
       </div>
     </div>
   )
