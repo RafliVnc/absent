@@ -19,24 +19,50 @@ enum UserRole {
   HEADCOACH
 }
 
+enum FeeType {
+  TUITION
+  SALARY
+}
+
+enum GenderType {
+  MALE
+  FEMALE
+}
+
+enum AttendanceStatus {
+  ABSENT
+  PRESENT
+}
+
+enum EventType {
+  PROGRAM
+  TOURMNAMENT
+  EXAM
+}
+
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String
-  email         String    @unique
+  email         String     @unique
   password      String?
-  role          UserRole  @default(ATHLETE)
+  role          UserRole   @default(ATHLETE)
   emailVerified DateTime?
   image         String?
+  gender        GenderType @default(MALE)
+  isActive      Boolean    @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
 
-  Account Account[]
-  Athlete Athlete[]
+  Account      Account[]
+  FeeHistory   FeeHistory[]
+  Notification Notification[]
+  Applog       Applog[]
+  Athlete      Athlete?
 }
 
 model Account {
-  userId            String
   type              String
   provider          String
   providerAccountId String
@@ -50,6 +76,8 @@ model Account {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  userId String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -66,45 +94,156 @@ model VerificationToken {
 }
 
 model Athlete {
-  id       Int       @id @default(autoincrement())
-  UserId   String
-  height   Int?
-  weight   Int?
-  brithday DateTime?
-  grade    String?
-  gender   String?
+  id               Int       @id @default(autoincrement())
+  height           Int?
+  weight           Int?
+  brithday         DateTime?
+  grade            String?
+  gradeCertificate String?
+  birthCertificate String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
 
-  User User @relation(fields: [UserId], references: [id], onDelete: Cascade)
+  userId String @unique
 
-  FeeHistory FeeHistory[]
+  FeeHistory        FeeHistory[]
+  AttendanceHistory AttendanceHistory[]
+  EventParticipant  EventParticipant[]
+  Material          Material[]
+  User              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Fee {
   id     Int    @id @default(autoincrement())
-  name   String @unique
+  name   String
   amount BigInt
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
 
   FeeHistory FeeHistory[]
 }
 
 model FeeHistory {
-  id        Int     @id @default(autoincrement())
-  AthleteId Int
-  FeeId     Int
-  note      String?
-  amount    Int
-  month     Int
-  year      Int
+  id     Int     @id @default(autoincrement())
+  note   String?
+  amount Int
+  month  Int
+  year   Int
+  type   FeeType @default(TUITION)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Athlete Athlete @relation(fields: [AthleteId], references: [id])
-  Fee     Fee     @relation(fields: [FeeId], references: [id])
+  athleteId Int?
+  feeId     Int
+  userId    String?
+
+  Athlete Athlete? @relation(fields: [athleteId], references: [id])
+  User    User?    @relation(fields: [userId], references: [id])
+  Fee     Fee      @relation(fields: [feeId], references: [id])
+}
+
+model Attendance {
+  id          Int      @id @default(autoincrement())
+  type        String
+  date        DateTime
+  startTime   String
+  endTime     String
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+
+  AttendanceHistory AttendanceHistory[]
+}
+
+model AttendanceHistory {
+  id     Int              @id @default(autoincrement())
+  status AttendanceStatus @default(PRESENT)
+
+  createdAt DateTime @default(now())
+
+  athleteId    Int
+  attendanceId Int
+
+  Athlete    Athlete    @relation(fields: [athleteId], references: [id])
+  Attendance Attendance @relation(fields: [attendanceId], references: [id])
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  title       String
+  type        EventType @default(EXAM)
+  description String?
+  //NOTE: date with start and end time for 1 day event
+  date        DateTime?
+  startTime   String?
+  endTime     String?
+  //NOTE: startDate and endDate for long event
+  startDate   DateTime?
+  endDate     DateTime?
+  image       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+
+  EventParticipant EventParticipant[]
+}
+
+model EventParticipant {
+  id Int @id @default(autoincrement())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  athleteId Int?
+  eventId   Int?
+
+  Athlete Athlete? @relation(fields: [athleteId], references: [id])
+  Event   Event?   @relation(fields: [eventId], references: [id])
+}
+
+model Material {
+  id          Int     @id @default(autoincrement())
+  url         String
+  title       String
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+
+  athleteId Int
+
+  Athlete Athlete @relation(fields: [athleteId], references: [id])
+}
+
+model Notification {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+
+  createdAt DateTime @default(now())
+
+  userId String
+
+  User User @relation(fields: [userId], references: [id])
+}
+
+model Applog {
+  id       Int     @id @default(autoincrement())
+  note     String?
+  response String?
+
+  createdAt DateTime @default(now())
+
+  userId String
+
+  User User @relation(fields: [userId], references: [id])
 }
