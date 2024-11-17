@@ -15,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useToast } from '@/components/ui/use-toast'
 import { UserWitoutPassword } from '@/app/api/(modal)/userModal'
+import { api } from '@/lib/utils'
 
 export default function TableCoach() {
   const [isOpen, setOpen] = useState(false)
@@ -41,29 +42,28 @@ export default function TableCoach() {
   }
 
   const handleSubmit = async (data: z.infer<typeof createCoachSchema>) => {
-    const isUpdate = !!form.getValues('id')
+    try {
+      const isUpdate = !!form.getValues('id')
 
-    if (!isUpdate) {
-      const validation = await form.trigger(['password', 'confirmPassword'])
-      if (!validation) return
-    }
+      if (!isUpdate) {
+        const validation = await form.trigger(['password', 'confirmPassword'])
+        if (!validation) return
+      }
 
-    const url = isUpdate ? `/api/coach/${data.id}` : '/api/coach'
+      const url = isUpdate ? `/api/coach/${data.id}` : '/api/coach'
 
-    const response = await fetch(url, {
-      method: isUpdate ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(isUpdate ? { id: data.id, name: data.name, email: data.email } : data)
-    })
+      await api(url, {
+        method: isUpdate ? 'PUT' : 'POST',
+        body: JSON.stringify(isUpdate ? { id: data.id, name: data.name, email: data.email } : data)
+      })
 
-    if (response.ok) {
       toast({ title: isUpdate ? 'Coach updated' : 'Coach created', variant: 'success', duration: 2000 })
       reload()
       setOpen(false)
       form.reset()
-    } else {
-      const { message } = await response.json()
-      toast({ title: message, variant: 'destructive', duration: 2000 })
+    } catch (e) {
+      const error = e as Error
+      toast({ title: error.message || 'Tidak Dapat Memperbarui Pelatih', variant: 'destructive', duration: 2000 })
     }
   }
 

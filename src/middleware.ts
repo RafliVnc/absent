@@ -41,7 +41,7 @@ export async function middleware(req: NextRequest) {
 
   if (!isPublicRoutes && !token) {
     if (isBeRoute) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ errors: [{ message: 'Unauthorized' }] }, { status: 401 })
     }
     return Response.redirect(new URL('/login', req.url))
   }

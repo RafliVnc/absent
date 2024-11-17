@@ -2,7 +2,7 @@ import { UserQueryParams } from '@/common/constants/formatParams'
 import prisma from '@/lib/db/prisma'
 import { Prisma, User } from '@prisma/client'
 
-export type UserWitoutPassword = Omit<User, 'password' | 'updatedAt'>
+export type UserWitoutPassword = Omit<User, 'password' | 'updatedAt' | 'deleted'>
 
 export const getPagination = async (
   params: UserQueryParams
@@ -24,6 +24,8 @@ export const getPagination = async (
       id: true,
       email: true,
       role: true,
+      isActive: true,
+      gender: true,
       emailVerified: true,
       image: true,
       createdAt: true

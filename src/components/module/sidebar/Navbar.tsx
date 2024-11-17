@@ -28,7 +28,7 @@ export default function Navbar() {
   const { toast } = useToast()
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center justify-end gap-3 bg-white px-10 shadow-custom">
+    <header className="sticky top-4 z-10 mx-6 mt-4 flex h-16 items-center justify-end gap-3 rounded-xl bg-white px-10 shadow-custom">
       {status === 'loading' ? (
         <div className="flex items-center space-x-4">
           <div className="space-y-2">

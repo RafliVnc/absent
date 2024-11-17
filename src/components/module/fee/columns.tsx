@@ -42,7 +42,7 @@ export const columns = (
   },
   {
     accessorKey: 'name',
-    header: 'Nama Iuran',
+    header: 'Nama',
     cell: ({ row }) => {
       const Fee = row.original
 
@@ -65,8 +65,32 @@ export const columns = (
     }
   },
   {
+    accessorKey: 'type',
+    header: 'Tipe',
+    cell: ({ row }) => {
+      const Fee = row.original
+
+      return isOpen && (Fee.id === 0 || Fee.id === currentData.id) ? (
+        <TextField
+          type="text"
+          placeholder="Nama"
+          defaultValue={form.getValues('name')}
+          onChange={e => {
+            form.setValue('name', e.target.value)
+          }}
+          error={!!form.formState.errors.name?.message}
+          helperText={form.formState.errors.name?.message}
+        />
+      ) : (
+        <div className="text-start">
+          <p className="text-sm">{Fee.type}</p>
+        </div>
+      )
+    }
+  },
+  {
     accessorKey: 'amount',
-    header: 'Iuran',
+    header: 'Total',
     cell: ({ row }) => {
       const Fee = row.original
 

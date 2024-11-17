@@ -10,9 +10,9 @@ export default function CoachLayout({ children }: CoachLayoutProps) {
   return (
     <div className="relative flex h-screen overflow-hidden">
       <Sidebar />
-      <div className="w-full">
+      <div className="w-full overflow-auto">
         <Navbar />
-        <main className="h-[calc(100vh-4rem)] overflow-auto">{children}</main>
+        <main className="">{children}</main>
       </div>
     </div>
   )

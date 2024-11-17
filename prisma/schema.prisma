@@ -20,8 +20,8 @@ enum UserRole {
 }
 
 enum FeeType {
-  TUITION
-  SALARY
+  INCOME
+  OUTCOME
 }
 
 enum GenderType {
@@ -116,9 +116,10 @@ model Athlete {
 }
 
 model Fee {
-  id     Int    @id @default(autoincrement())
+  id     Int     @id @default(autoincrement())
   name   String
   amount BigInt
+  type   FeeType @default(INCOME)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -133,7 +134,6 @@ model FeeHistory {
   amount Int
   month  Int
   year   Int
-  type   FeeType @default(TUITION)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -179,6 +179,7 @@ model Event {
   id          Int       @id @default(autoincrement())
   title       String
   type        EventType @default(EXAM)
+  location    String
   description String?
   //NOTE: date with start and end time for 1 day event
   date        DateTime?
@@ -187,6 +188,8 @@ model Event {
   //NOTE: startDate and endDate for long event
   startDate   DateTime?
   endDate     DateTime?
+  grade       String?
+  place       String?
   image       String?
 
   createdAt DateTime @default(now())

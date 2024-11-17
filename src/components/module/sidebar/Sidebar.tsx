@@ -23,10 +23,10 @@ export default function Sidebar() {
     <aside
       className={cn(
         'transition-width sticky left-0 top-4 z-20 my-4 ml-4 flex h-[95vh] rounded-xl bg-primary py-4 text-white duration-300 ease-in-out',
-        isOpen ? 'w-[15%]' : 'w-[5%]'
+        isOpen ? 'w-[15%]' : 'w-[4%]'
       )}
     >
-      <div className="flex w-full flex-col gap-4">
+      <div className="flex w-full flex-col gap-2">
         <div className="flex w-full items-center justify-center">
           <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} className="mb-2">
             <FontAwesomeIcon icon={faBars} className="size-5" />
