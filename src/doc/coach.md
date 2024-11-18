@@ -15,24 +15,26 @@ Response body (Success):
 
 ```json
 {
-  "data": {
-    "rows": [
-      {
-        "email": "coach1@mail.com",
-        "name": "coach1",
-        "role": "COACH",
-        "image": null,
-        "isActive": true
-      },
-      {
-        "email": "coach2@mail.com",
-        "name": "coach2",
-        "role": "COACH",
-        "image": null,
-        "isActive": true
-      }
-    ],
-    "count": 2
+  "data": [
+    {
+      "email": "coach1@mail.com",
+      "name": "coach1",
+      "role": "COACH",
+      "image": null,
+      "isActive": true
+    },
+    {
+      "email": "coach2@mail.com",
+      "name": "coach2",
+      "role": "COACH",
+      "image": null,
+      "isActive": true
+    }
+  ],
+  "paging": {
+    "page": 1,
+    "perPage": 10,
+    "size": 2
   }
 }
 ```
