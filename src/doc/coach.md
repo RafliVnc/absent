@@ -34,7 +34,7 @@ Response body (Success):
   "paging": {
     "page": 1,
     "perPage": 10,
-    "size": 2
+    "totalItem": 2
   }
 }
 ```
