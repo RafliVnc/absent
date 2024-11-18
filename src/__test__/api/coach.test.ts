@@ -1,5 +1,5 @@
 import { testApiHandler } from 'next-test-api-route-handler'
-import * as appHandler from '@/app/api/coach/route'
+import * as coachHandler from '@/app/api/coach/route'
 import * as coachIdHandler from '@/app/api/coach/[id]/route'
 import { CoachTestUtils } from '../test-utils'
 
@@ -9,7 +9,7 @@ describe('GET /coach', () => {
 
     await testApiHandler({
       url: '/api/coach?page=1&perPage=1',
-      appHandler,
+      appHandler: coachHandler,
       async test({ fetch }) {
         const res = await fetch({
           method: 'GET'
@@ -33,7 +33,7 @@ describe('POST /coach', () => {
     expect.hasAssertions()
 
     await testApiHandler({
-      appHandler,
+      appHandler: coachHandler,
       async test({ fetch }) {
         const body = {
           email: 'admin@a.com1',
@@ -59,7 +59,7 @@ describe('POST /coach', () => {
     expect.hasAssertions()
 
     await testApiHandler({
-      appHandler,
+      appHandler: coachHandler,
       async test({ fetch }) {
         const body = {
           email: 'test@example.com',

@@ -40,6 +40,11 @@ enum EventType {
   EXAM
 }
 
+enum SalaryStatus {
+  PAID
+  UNPAID
+}
+
 model User {
   id            String     @id @default(cuid())
   name          String
@@ -51,15 +56,16 @@ model User {
   gender        GenderType @default(MALE)
   isActive      Boolean    @default(false)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deleted   Boolean  @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deleted   DateTime?
 
-  Account      Account[]
-  FeeHistory   FeeHistory[]
-  Notification Notification[]
-  Applog       Applog[]
-  Athlete      Athlete?
+  Account       Account[]
+  FeeHistory    FeeHistory[]
+  Notification  Notification[]
+  Applog        Applog[]
+  Athlete       Athlete?
+  SalaryHistory SalaryHistory[]
 }
 
 model Account {
@@ -102,9 +108,9 @@ model Athlete {
   gradeCertificate String?
   birthCertificate String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deleted   Boolean  @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deleted   DateTime?
 
   userId String @unique
 
@@ -121,9 +127,9 @@ model Fee {
   amount BigInt
   type   FeeType @default(INCOME)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deleted   Boolean  @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deleted   DateTime?
 
   FeeHistory FeeHistory[]
 }
@@ -155,9 +161,9 @@ model Attendance {
   endTime     String
   description String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deleted   Boolean  @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deleted   DateTime?
 
   AttendanceHistory AttendanceHistory[]
 }
@@ -192,9 +198,9 @@ model Event {
   place       String?
   image       String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deleted   Boolean  @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deleted   DateTime?
 
   EventParticipant EventParticipant[]
 }
@@ -218,9 +224,9 @@ model Material {
   title       String
   description String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deleted   Boolean  @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deleted   DateTime?
 
   athleteId Int
 
@@ -245,6 +251,22 @@ model Applog {
   response String?
 
   createdAt DateTime @default(now())
+
+  userId String
+
+  User User @relation(fields: [userId], references: [id])
+}
+
+model SalaryHistory {
+  id      Int          @id @default(autoincrement())
+  total   Int
+  percent Int?
+  income  Int?
+  status  SalaryStatus @default(UNPAID)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deleted   DateTime?
 
   userId String
 
